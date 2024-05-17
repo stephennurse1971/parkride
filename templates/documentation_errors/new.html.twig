@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Documentation Error{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New: Documentation Error</h1>
+
+    {{ include('documentation_errors/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('documentation_errors_index',{service: 'All'}) }}">Return to list</a>
+{% endblock %}

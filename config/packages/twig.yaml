@@ -1,0 +1,25 @@
+twig:
+  default_path: '%kernel.project_dir%/templates'
+  form_themes: [ 'bootstrap_4_layout.html.twig' ]
+  globals:
+    ClientAvailableAndRelevantTransaction: '@App\Services\ClientAvailableAndRelevantTransaction'
+    ClientHasFutureImmigrationAppointment: '@App\Services\ClientHasFutureImmigrationAppointment'
+    ClientHasFutureOfficeAppointment: '@App\Services\ClientHasFutureOfficeAppointment'
+    ClientsWithPendingTransactions: '@App\Services\ClientsWithPendingTransactions'
+    cmsfooter: '@App\Services\CMS'
+    CountBusinessContactReferals: '@App\Services\CountBusinessContactReferals'
+    CountTransactions: '@App\Services\CountTransactions'
+    CountPendingWebsiteInquiries: '@App\Services\CountPendingWebsiteInquiries'
+    FutureOfficeAppointmentsThatAreAvailable: '@App\Services\FutureOfficeAppointmentsThatAreAvailable'
+    FindOfficeAppointmentsByDateAndHour: '@App\Services\FindOfficeAppointmentsByDateAndHour'
+    OfficeAppointmentsByClientForDateAndHour: '@App\Services\OfficeAppointmentsByClientForDateAndHour'
+    FutureOfficeAppointments: '@App\Services\FutureOfficeAppointmentsByUser'
+    servicesOffered: '@App\Services\ServicesOffered'
+    CountBookingSlots: '@App\Services\CountBookingSlots'
+    DocumentAuditTracker: '@App\Services\DocumentAuditTracker'
+
+
+when@test:
+  twig:
+    strict_variables: true
+

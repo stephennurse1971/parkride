@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<h1 class="text-danger">Dashboard</h1>
+{% if is_granted('ROLE_STAFF') %}
+    <hr>
+    <a style="background-color: yellow" target="_blank" href="{{ path('advanced_dashboard') }}">Advanced
+        Dashboard</a>
+    <hr>
+{% endif %}
+
+
+<div class="row">
+    <div class="col-12 col-lg-2">
+        <div class="border p-2">
+            {% if is_granted('ROLE_STAFF') %}
+                <h2 class="d-inline" style="color: red">Clients</h2>
+                <a class="btn-outline-success btn-sm" target="_blank" href="{{ path('user_new' ) }}">+</a>
+                <ul><a target="_blank" href="{{ path('user_index', {status: 'Active'}) }}">Pending</a></ul>
+                <ul><a target="_blank" href="{{ path('user_index', {status: 'Complete'}) }}">Completed</a></ul>
+                <ul><a target="_blank" href="{{ path('user_index', {status: 'All'}) }}">All</a></ul>
+                <ul><a target="_blank" href="{{ path('website_contacts_index' ) }}">Website inquiries</a></ul>
+                <br><br>
+            {% endif %}
+            {% if is_granted('ROLE_STAFF') %}
+            {% else %}
+                <h2 style="color: red">Profile</h2>
+                <ul><a target="_blank" href="{{ path('user_edit', {fullName: app.user.fullName}) }}">My profile</a>
+                </ul>
+            {% endif %}
+            <br>
+            <br>
+
+
+            <h2 style="color: red">Transactions</h2>
+            {% if is_granted('ROLE_STAFF') %}
+            <ul><a target="_blank" href="{{ path('transaction_index', {subset: 'Pending', clientName: 'All'}) }}">
+                    Pending</a></ul>
+            <ul><a target="_blank" href="{{ path('transaction_index', {subset: 'Complete',  clientName: 'All'}) }}">
+                    Completed</a></ul>
+            <ul><a target="_blank"
+                   href="{{ path('transaction_index', {subset: 'Abandoned',  clientName: 'All'}) }}">
+                    Abandoned</a></ul>
+            {% else %}
+                <ul><a target="_blank"
+                       href="{{ path('transaction_index', {subset: 'My',  clientName: 'My'}) }}">
+                        My transactions</a></ul>
+            {% endif %}
+            <br>
+            <br>
+
+            {% if is_granted('ROLE_STAFF') %}
+                <h2 style="color: red">Emails <a target="_blank" href="{{ path('email_templates_index') }}">+</a>
+                </h2>
+                <ul><a target="_blank" href="{{ path('emails_index') }}">Emails</a></ul>
+                <ul><a target="_blank" href="{{ path('document_history_index') }}">Document History</a></ul>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    <div class="col-12 col-lg-2">
+        <div class="border p-2">
+            <h2 style="color: red">Appointments & Client Availablity</h2>
+            {% if is_granted('ROLE_STAFF') %}
+                <ul>
+                    <a target="_blank" href="{{ path('office_appointments_index') }}">{{ cms.companyName }}</a>
+                </ul>
+            {% else %}
+                <ul>
+                    <a target="_blank" href="{{ path('office_appointments_index_client') }}">{{ cms.companyName }}</a>
+                </ul>
+            {% endif %}
+            {% if is_granted('ROLE_STAFF') %}
+                <ul><a target="_blank" href="{{ path('client_availability_index') }}">Immigration Office
+                        Appointments</a>
+                    <a target="_blank" href="{{ path('/immigration_pathos_address') }}">
+                        <i style="color: red" class="fa fa-map-marker mr-3"></i></a>
+                </ul>
+            {% else %}
+                <ul><a target="_blank"
+                       href="{{ path('client_availability_by_client', {clientFullName: app.user.fullName}) }}">My
+                        availability</a></ul>
+            {% endif %}
+            <br>
+            <br>
+            <br>
+
+            <h2 style="color: red">Payments</h2>
+            <ul>
+                <a target="_blank" href="{{ path('payments_index') }}">Payments</a>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-2">
+        <div class="border p-2">
+            <h2 style="color: red">Useful links</h2>
+            <ul><a target="_blank" href="{{ path('business_contacts_index') }}">Helpful contacts</a></ul>
+            <ul><a target="_blank" href="{{ path('flight_stats_index') }}">Flight scanner</a></ul>
+            <ul><a target="_blank" href="{{ path('flight_destinations_index') }}">Flight Destinations</a></ul>
+        </div>
+    </div>
+
+
+
+
+    {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+        <script src="{{ asset('admin/js/AGS.js') }}"></script>
+    {% endblock javascripts %}
+
+    {% block datatable %}
+        <script>
+            $(document).ready(function () {
+                $('#table').DataTable({
+                    'pageLength': 100,
+                    "order": [[2, 'asc'], [3, 'asc'], [4, 'asc']],
+                    "paging": true,
+                    "searching": true,
+                    "bInfo": true
+                });
+            });
+        </script>
+    {% endblock datatable %}

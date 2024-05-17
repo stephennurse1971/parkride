@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Official Form{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Official Forms</h1>
+
+    {{ include('official_forms/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('official_forms_index') }}">Return to list</a>
+{% endblock %}

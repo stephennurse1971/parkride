@@ -1,0 +1,216 @@
+{% if passport is defined %}
+    {% set document = passport %}
+    {% set documentC = 'Passport' %}
+    {% set urldoc = 'passports' %}
+    {% set client = passport.passportHolder %}
+    {% if passport.passportHolder is not empty %}
+        {% set clientId = passport.passportHolder.id %}
+        {% set clientName = passport.passportHolder %}
+    {% endif %}
+{% endif %}
+
+{% if driving_license is defined %}
+    {% set document = driving_license %}
+    {% set documentC = 'Driving License' %}
+    {% set urldoc = 'driving_license' %}
+    {% set client = driving_license.drivingLicenseHolder %}
+    {% if driving_license.drivingLicenseHolder is not empty %}
+        {% set clientId = driving_license.drivingLicenseHolder.id %}
+    {% endif %}
+{% endif %}
+
+{% if birth_death_marriage_certificate is defined %}
+    {% set document = birth_death_marriage_certificate %}
+    {% set documentC = 'Birth Marriage Death Certificate' %}
+    {% set urldoc = 'birth_death_marriage_certificates' %}
+    {% set client = birth_death_marriage_certificate.applicant %}
+    {% if birth_death_marriage_certificate.applicant is not empty %}
+        {% set clientId = birth_death_marriage_certificate.applicant.id %}
+    {% endif %}
+{% endif %}
+
+{% if financial_statement is defined %}
+    {% set document = financial_statement %}
+    {% set documentC = 'Financial Statement' %}
+    {% set urldoc = 'financial_statements' %}
+    {% set client = financial_statement.accountHolder %}
+    {% if financial_statement.accountHolder is not empty %}
+        {% set clientId = financial_statement.accountHolder.id %}
+    {% endif %}
+{% endif %}
+
+{% if employment_contract is defined %}
+    {% set document = employment_contract %}
+    {% set documentC = 'Employment Contract' %}
+    {% set urldoc = 'employment_contracts' %}
+    {% set client = employment_contract.employee %}
+    {% if employment_contract.employee is not empty %}
+        {% set clientId = employment_contract.employee.id %}
+    {% endif %}
+{% endif %}
+
+{% if health_insurance is defined %}
+    {% set document = health_insurance %}
+    {% set documentC = 'Health Insurance' %}
+    {% set urldoc = 'health_insurance' %}
+    {% set client = health_insurance.applicant %}
+    {% if health_insurance.applicant is not empty %}
+        {% set clientId = health_insurance.applicant.id %}
+    {% endif %}
+{% endif %}
+
+{% if utility_bill is defined %}
+    {% set document = utility_bill %}
+    {% set documentC = 'Utility Bill' %}
+    {% set urldoc = 'utility_bills' %}
+    {% set client = utility_bill.customer %}
+    {% if utility_bill.customer is not empty %}
+        {% set clientId = utility_bill.customer.id %}
+    {% endif %}
+{% endif %}
+
+{% if school_attendance_certificate is defined %}
+    {% set document = school_attendance_certificate %}
+    {% set documentC = 'School Attendance Certificate' %}
+    {% set urldoc = 'school_attendance_certificates' %}
+    {% set client = school_attendance_certificate.student %}
+    {% if school_attendance_certificate.student is not empty %}
+        {% set clientId = school_attendance_certificate.student.id %}
+    {% endif %}
+{% endif %}
+
+{% if tenancy_agreement is defined %}
+    {% set document = tenancy_agreement %}
+    {% set documentC = 'Tenancy Agreement' %}
+    {% set urldoc = 'tenancy_agreements' %}
+    {% set client = tenancy_agreement.tenant %}
+    {% if tenancy_agreement.tenant is not empty %}
+        {% set clientId = tenancy_agreement.tenant.id %}
+    {% endif %}
+{% endif %}
+
+{% if medical is defined %}
+    {% set document = medical %}
+    {% set documentC = 'Medical' %}
+    {% set urldoc = 'medical' %}
+    {% set client = medical.patient %}
+    {% if medical.patient is not empty %}
+        {% set clientId = medical.patient.id %}
+    {% endif %}
+{% endif %}
+
+{% if criminal_record_check is defined %}
+    {% set document = criminal_record_check %}
+    {% set documentC = 'Criminal Record Check' %}
+    {% set urldoc = 'criminal_record_check' %}
+    {% set client = criminal_record_check.applicant %}
+    {% if criminal_record_check.applicant is not empty %}
+        {% set clientId = criminal_record_check.applicant.id %}
+    {% endif %}
+{% endif %}
+
+<div class="col-12 col-lg-2">
+    <h4 style="color: red">Guidelines
+        {% if is_granted('ROLE_STAFF') %}
+            <a style="color: red" target="_blank" href="{{ path('document_guidelines_edit',{id: guidelines.id}) }}">
+                <i class="fa fa-pen"></i>
+            </a>
+        {% endif %}
+    </h4>
+    {{ guidelines.guidelines|raw }}
+</div>
+
+<div class="col-12 col-lg-2 error_report_or_audit">
+    <h4 style="color: red">Review/check
+        <i title="Staff: Read/Write.  Clients: Read-Only" class="fa fa-info-circle"></i>
+    </h4>
+    {{ form_row(form.reviewed) }}
+    {{ form_row(form.reviewedBy) }}
+    {{ form_row(form.reviewedDate) }}
+    {{ form_row(form.comments) }}
+
+    <div class="standard-error-list">
+        {{ form_row(form.standardError) }}
+    </div>
+</div>
+
+<div class="col-12 col-lg-5 error_report_or_audit">
+    <h4 style="color: red">Error report
+    <i title="Read-Only" class="fa fa-info-circle"></i></h4>
+    {% if document.standardError is not null %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Error</th>
+                <th>Detail</th>
+                <th>Remedy</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for error in document.standardError %}
+                <tr>
+                    <td>
+                        {{ error.summaryCheckbox }}
+                    </td>
+                    <td>
+                        {{ error.description }}
+                    </td>
+                    <td>
+                        {{ error.remedy }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+
+</div>
+
+<hr>
+
+{% if clientId is defined %}
+    <div class="row error_report_or_audit">
+        <div class="col-12 col-lg-6">
+            <a target="_blank" href="{{ path('document_history_index', {clientId: clientId}) }}"><i
+                        class="fa fa-info-circle"></i> </a>
+            <h4 style="color: red">Audit history </h4>
+
+            <table class="table">
+
+                <thead>
+                <tr>
+                    <th style="width: 150px">Date</th>
+                    <th style="width: 150px">Date</th>
+                    <th style="width: 250px">By</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for history in DocumentAuditTracker.documentHistory('document',client) %}
+                <tr>
+                    <td data-sort="{{ history.date|date('Y-m-d H:i') }}">
+                        {{ history.date|date('d-M-y') }}
+                    </td>
+                    <td>
+                        {{ history.date|date('H:i') }}
+                    </td>
+                    <td>
+                        {{ history.editedBy.fullName }}
+                    </td>
+                    <td>
+                        {{ history.notes }}
+                    </td>
+                </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <br>
+            <br>
+            <hr>
+
+        </div>
+    </div>
+{% endif %}

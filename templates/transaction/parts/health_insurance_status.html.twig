@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsHealthInsurance == 0 %}
+                N/R
+            {% elseif services_offered.docsHealthInsurance == 1 %}
+                {% set health_insurances_uploaded_flag = 0 %}
+                {% for health_insurance in health_insurances %}
+                    {% if health_insurance.applicant == transaction.client %}
+                        {% set health_insurances_uploaded_flag = 1 %}
+                        {% if health_insurance.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('health_insurance_edit', {'id': health_insurance.id }) }}"> <i
+                                        title="Reviewed by {{ health_insurance.reviewedBy.fullName }} on {{ health_insurance.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif health_insurance.reviewed == "Pending"  or health_insurance.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('health_insurance_edit', {'id': health_insurance.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif health_insurance.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('health_insurance_edit', {'id': health_insurance.id }) }}"> <i
+                                        title="Reviewed by {{ health_insurance.reviewedBy.fullName }} on {{ health_insurance.reviewedDate|date ('d-M-Y') }}. Comments: {{ health_insurance.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if health_insurances_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('health_insurance_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

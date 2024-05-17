@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Website Contact{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Website Contact</h1>
+
+    {{ include('website_contacts/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('website_contacts_index') }}">Return to list</a>
+{% endblock %}

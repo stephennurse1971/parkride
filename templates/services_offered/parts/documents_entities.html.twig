@@ -1,0 +1,26 @@
+{% if is_granted('ROLE_ADMIN') %}
+    <th><a target="_blank" href="{{ path('passports_index') }}">Passport</a></th>
+    <th><a target="_blank" href="{{ path('tenancy_agreements_index') }}">Tenancy<br>Agreement</a></th>
+    <th><a target="_blank" href="{{ path('utility_bills_index') }}">Utility<br>Bill</a></th>
+    <th><a target="_blank" href="{{ path('employment_contracts_index') }}">Employment<br>Contract</a></th>
+    <th><a target="_blank" href="{{ path('financial_statements_index') }}">Financial<br>Statements</a></th>
+    <th><a target="_blank" href="{{ path('school_attendance_certificates_index') }}">School<br> Attendance<br>Cert</a></th>
+    <th><a target="_blank" href="{{ path('birth_death_marriage_certificates_index') }}">Birth<br> Marriage<br>Death<br>Cert</a>
+    </th>
+    <th><a target="_blank" href="{{ path('criminal_record_check_index') }}">Criminal<br>Record<br>Check</a></th>
+    <th><a target="_blank" href="{{ path('health_insurance_index') }}">Health<br> Insurance</a></th>
+    <th><a target="_blank" href="{{ path('medical_index') }}">Medical</a></th>
+    <th><a target="_blank" href="{{ path('driving_license_index') }}">Driving<br>License</a></th>
+{% else %}
+    <th> Passport</th>
+    <th>Tenancy Agreement</th>
+    <th>Utility Bill</th>
+    <th>Employment Contract</th>
+    <th>Financial Statements</th>
+    <th>School Attendance Cert</th>
+    <th>Birth Marriage Death Cert</th>
+    <th>Criminal Record Check</th>
+    <th>Health Insurance</th>
+    <th>Medical</th>
+    <th>Driving License</th>
+{% endif %}

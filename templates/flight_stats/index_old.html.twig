@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Flight Prices{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Flight Prices</h1>
+
+{#    <a class="btn btn-danger btn-sm" href="{{ path('flight_stats_delete_all') }}">Delete All</a>#}
+{#    <a class="btn btn-outline-secondary btn-sm" href="{{ path('house_guests_flight_price_scrape_london_pfo') }}">Scrape#}
+{#        flights</a>#}
+    <br>
+    <br>
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Flight From</th>
+            <th>Flight To</th>
+            <th>Lowest Price</th>
+            <th>Date scraped</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for flight_stat in flight_stats %}
+            {% if flight_stat.date|date('D') == "Sat" or flight_stat.date|date('D') == "Sun" %}
+                <tr style="background-color: #bac8f3">
+            {% else %}
+                <tr>
+            {% endif %}
+            <td style="text-align: left"
+                data-sort={{ flight_stat.date| date('Y-m-d') }}>{{ flight_stat.date | date('D d-M-y') }}</td>
+            <td style="text-align: center">{{ flight_stat.flightFrom }}</td>
+            <td style="text-align: center">{{ flight_stat.flightTo }}</td>
+            <td style="text-align: right">{{ flight_stat.lowestPrice|number_format(2, '.', ',') }}</td>
+            <td style="text-align: right"
+                data-sort={{ flight_stat.scrapeDate| date('Y-m-d') }}>{{ flight_stat.scrapeDate | date('d-M-y') }}</td>
+            <td style="width: 250px">
+                <a class="btn btn-outline-danger btn-sm"
+                   href="{{ path('flight_stats_edit', {'id': flight_stat.id}) }}">Edit</a>
+                <form class="d-inline" method="post" action="{{ path('flight_stats_delete', {'id': flight_stat.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ flight_stat.id) }}">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('flight_stats_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                "pageLength": 100,
+                "order": [[0, 'desc'], [1, 'desc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-lg-12 col-12">
+        <div class="transaction-show">
+            <table class="table">
+                <thead>
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+
+        </div>
+        <div class="col-lg-6 col-12">
+                    <th>Passport<br>Holder</th>
+                    <th>
+                        {% if is_granted('ROLE_STAFF') %}
+                            <a target="_blank" href="{{ path('countries_index') }}">Country</a>
+                        {% else %}
+                            Country
+                        {% endif %}
+                    </th>
+                    <th>EU</th>
+                    <th>Issue<br>Date</th>
+                    <th>Expiry<br>Date</th>
+                    <th>Passport<br>Number</th>
+                    <th>Place<br>of<br>Birth</th>
+                    <th>Gender</th>
+                    <th style="text-align: center">Scan 1</th>
+                    <th style="text-align: center">Scan 2</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for passport in passports %}
+                    <tr>
+                        {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                        <td>
+                            {{ passport.passportHolder.fullName }}
+                        </td>
+                        <td>
+                            {% if passport.country is not null %}
+                                {{ passport.country.country }}
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center">
+                            {% if passport.country.isEU == 1 %}
+                                <i class="fa fa-circle" style="color: blue; text-align: center"></i>
+                            {% elseif passport.country.isEU == 0 %}
+                                <i class="fa fa-circle" style="color: red; text-align: center"></i>
+                            {% else %}
+                                <i class="fa fa-circle" style="color: grey; text-align: center"></i>
+                            {% endif %}
+                        </td>
+                        <td data-sort="{{ passport.issueDate|date('Y-m-d') }}">{{ passport.issueDate ? passport.issueDate|date('d-M-Y') : '' }}</td>
+                        <td data-sort="{{ passport.expiryDate|date('Y-m-d') }}">{{ passport.expiryDate ? passport.expiryDate|date('d-M-Y') : '' }}</td>
+                        <td style="text-align: right">{{ passport.passportNumber }}</td>
+                        <td>{{ passport.placeOfBirth }}</td>
+                        <td>{{ passport.passportHolder.gender }}</td>
+                        <td style="text-align: center;width: 150px">
+                            {% if passport.passportScan1 is not empty %}
+                                <a title="{{ passport.passportScan1 }}" target="_blank"
+                                   href="{{ path('attachments_viewfile',{id : passport.id, filename: "Passport1"}) }}"><i
+                                            class="fa fa-paperclip"></i></a>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center;width: 150px">
+                            {% if passport.passportScan2 is not empty %}
+                                <a title="{{ passport.passportScan2 }}" target="_blank"
+                                   href="{{ path('attachments_viewfile',{id : passport.id, filename: "Passport2"}) }}"><i
+                                            class="fa fa-paperclip"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MEU1 Form{% endblock %}
+
+{% block body %}
+  <style>
+    .form td,th{
+      border: 1.5px solid black;
+      padding-left:2px;
+      padding-top:0px;
+      /*width: 150px;*/
+      vertical-align: text-top;
+    }
+    table{
+      width: 100%;
+    }
+    .form{
+      table-layout: fixed;
+      width: 100%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .col-head{
+      background-color:#bcbcbc;
+      font-weight: bold;
+    }
+  </style>
+<div class="container-fluid" style="margin-top:50px">
+  <div class="row ">
+    <div class="col-10 m-auto p-5" style="background-color:white">
+      {% include 'transaction/official_forms/MEU1_files/parts/1_header.html.twig' %}
+      {% include 'transaction/official_forms/MEU1_files/parts/2_citizenship.html.twig' %}
+      {% include 'transaction/official_forms/MEU1_files/parts/3_family_members.html.twig' %}
+      {% include 'transaction/official_forms/MEU1_files/parts/4_employer.html.twig' %}
+      {% include 'transaction/official_forms/MEU1_files/parts/5_self_employed.html.twig' %}
+{#      {% include 'transaction/official_forms/MEU1_files/parts/6_instructions_greek.html.twig' %}#}
+{#      {% include 'transaction/official_forms/MEU1_files/parts/7_instructions_english.html.twig' %}#}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

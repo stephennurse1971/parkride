@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Flight Destinations{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Flight Destinations</h1>
+
+    {{ include('flight_destinations/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('flight_destinations_index') }}">Return to list</a>
+{% endblock %}

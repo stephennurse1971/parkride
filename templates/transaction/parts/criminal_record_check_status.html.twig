@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsCriminalRecordCheck == 0 %}
+                N/R
+            {% elseif services_offered.docsCriminalRecordCheck == 1 %}
+                {% set criminal_record_check_uploaded_flag = 0 %}
+                {% for criminal_record_check in criminal_record_checks %}
+                    {% if criminal_record_check.applicant == transaction.client %}
+                        {% set criminal_record_check_uploaded_flag = 1 %}
+                        {% if criminal_record_check.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('criminal_record_check_edit', {'id': criminal_record_check.id }) }}"> <i
+                                        title="Reviewed by {{ criminal_record_check.reviewedBy.fullName }} on {{ criminal_record_check.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif criminal_record_check.reviewed == "Pending" or criminal_record_check.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('criminal_record_check_edit', {'id': criminal_record_check.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif criminal_record_check.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('criminal_record_check_edit', {'id': criminal_record_check.id }) }}"> <i
+                                        title="Reviewed by {{ criminal_record_check.reviewedBy.fullName }} on {{ criminal_record_check.reviewedDate|date ('d-M-Y') }}. Comments: {{ passport.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if criminal_record_check_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('criminal_record_check_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

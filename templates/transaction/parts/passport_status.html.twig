@@ -1,0 +1,37 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsPassport == 0 %}
+                N/R
+            {% elseif services_offered.docsPassport == 1 %}
+                {% set passport_uploaded_flag = 0 %}
+                {% for passport in passports %}
+                    {% if passport.passportHolder == transaction.client %}
+                        {% set passport_uploaded_flag = 1 %}
+                        {% if passport.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('passports_edit', {'id': passport.id }) }}"> <i
+                                        title="Reviewed by {{ passport.reviewedBy.fullName }} on {{ passport.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif passport.reviewed == "Pending" or passport.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('passports_edit', {'id': passport.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif passport.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('passports_edit', {'id': passport.id }) }}"> <i
+                                        title="Reviewed by {{ passport.reviewedBy.fullName }} on {{ passport.reviewedDate|date ('d-M-Y') }}. Comments: {{ passport.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+                {% if passport_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('passports_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Flight Stats{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Flight Stats</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ flight_stat.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ flight_stat.date ? flight_stat.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FlightFrom</th>
+                <td>{{ flight_stat.flightFrom }}</td>
+            </tr>
+            <tr>
+                <th>FlightTo</th>
+                <td>{{ flight_stat.flightTo }}</td>
+            </tr>
+            <tr>
+                <th>LowestPrice</th>
+                <td>{{ flight_stat.lowestPrice }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('flight_stats_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('flight_stats_edit', {'id': flight_stat.id}) }}">Edit</a>
+
+    {{ include('flight_stats/_delete_form.html.twig') }}
+{% endblock %}

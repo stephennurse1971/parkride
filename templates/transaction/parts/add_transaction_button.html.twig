@@ -1,0 +1,14 @@
+{% if is_granted('ROLE_STAFF') %}
+    <div class="dropdown">
+        <button type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            +
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for services_offered in services_offereds %}
+                <a class="dropdown-item"
+                   href="{{ path('transaction_new',{userId:transaction.client.id, serviceId:services_offered.id}) }}">{{ services_offered.serviceOffered }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

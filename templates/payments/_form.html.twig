@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-1">
+        {{ form_row(form.date) }}
+        {{ form_row(form.amount) }}
+        <div class="transaction">
+            {{ form_row(form.transaction) }}
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

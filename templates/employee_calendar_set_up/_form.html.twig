@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.employee) }}
+        {{ form_row(form.startTime) }}
+        {{ form_row(form.endTime) }}
+        {{ form_row(form.dayOfWeek) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.startDate) }}
+        {{ form_row(form.endDate) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

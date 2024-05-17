@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Settings</h1>
+
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Default: Start Date</th>
+            <th># Scrape Days</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for setting in settings %}
+            <tr>
+                <td><a href="{{ path('settings_edit', {'id': setting.id}) }}">{{ setting.id }}</a></td>
+
+                <td style="text-align: center">{{ setting.flightStatsStartDate ? setting.flightStatsStartDate|date('d-M-y') : '' }}</td>
+                <td style="text-align: center">{{ setting.flightStatsDays }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('settings_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                "pageLength": 100,
+                "order": [[0, 'desc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

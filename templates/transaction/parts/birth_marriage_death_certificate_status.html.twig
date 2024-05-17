@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsBirthMarriageDeathCertificate == 0 %}
+                N/R
+            {% elseif services_offered.docsBirthMarriageDeathCertificate == 1 %}
+                {% set birth_marriage_death_certificates_uploaded = 0 %}
+                {% for birth_marriage_death_certificate in birth_marriage_death_certificates %}
+                    {% if birth_marriage_death_certificate.applicant == transaction.client %}
+                        {% set birth_marriage_death_certificates_uploaded = 1 %}
+                        {% if birth_marriage_death_certificate.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('birth_death_marriage_certificates_edit', {'id': birth_marriage_death_certificate.id }) }}"> <i
+                                        title="Reviewed by {{ birth_marriage_death_certificate.reviewedBy.fullName }} on {{ birth_marriage_death_certificate.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif birth_marriage_death_certificate.reviewed == "Pending" or birth_marriage_death_certificate.reviewed is null%}
+                            <a target="_blank"
+                               href="{{ path('birth_death_marriage_certificates_edit', {'id': birth_marriage_death_certificate.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif birth_marriage_death_certificate.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('birth_death_marriage_certificates_edit', {'id': birth_marriage_death_certificate.id }) }}"> <i
+                                        title="Reviewed by {{ birth_marriage_death_certificate.reviewedBy.fullName }} on {{ birth_marriage_death_certificate.reviewedDate|date ('d-M-Y') }}. Comments: {{ birth_marriage_death_certificate.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if birth_marriage_death_certificates_uploaded == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('birth_death_marriage_certificates_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

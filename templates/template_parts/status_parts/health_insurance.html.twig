@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Applicant</th>
+                <th>Date</th>
+                <th>Insurance Provider</th>
+                <th style="text-align: center">Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for health_insurance in health_insurances %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('health_insurance_edit', {'id': health_insurance.id}) }}">{{ health_insurance.applicant.fullName }}</a>
+                    </td>
+                    <td data-sort="{{ health_insurance.date ? health_insurance.date|date('Y-m-d') : '' }}">{{ health_insurance.date ? health_insurance.date|date('d-M-Y') : '' }}</td>
+                    <td>{{ health_insurance.insuranceProvider }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if health_insurance.insuranceProvider is not empty %}
+                            <a title="{{ health_insurance.insuranceProvider }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : health_insurance.id, filename: "Health Insurance"}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>

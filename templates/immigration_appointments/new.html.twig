@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New: Immigration Appointment{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New ImmigrationAppointments</h1>
+
+    {{ include('immigration_appointments/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('immigration_appointments_index') }}">Return to list</a>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Audit History{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Audit History</h1>
+<div class="row">
+<div class="col-10">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 150px">Client</th>
+            <th>Document</th>
+            <th style="width: 120px">Date</th>
+            <th>Time</th>
+            <th>Edited By</th>
+            <th>Document ID</th>
+            <th>Notes</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for document_history in document_histories %}
+            <tr>
+                <td>{{ document_history.client.fullName }}</td>
+                <td>{{ document_history.document|capitalize }}</td>
+                <td data-sort="{{ document_history.date ? document_history.date|date('Y-m-d H:i:s') : '' }}">
+                    {{ document_history.date ? document_history.date|date('d-M-y') : '' }}
+                </td>
+                <td data-sort="{{ document_history.date ? document_history.date|date('Y-m-d H:i:s') : '' }}">
+                    {{ document_history.date ? document_history.date|date('H:i') : '' }}
+                </td>
+                <td style="text-align: right">{{ document_history.editedBy.fullName }}</td>
+                <td style="text-align: center">{{ document_history.documentId }}</td>
+                <td>
+                    {{ document_history.notes }}
+                </td>
+                <td class="d-inline">
+                    <a class="btn btn-outline-danger btn-sm"
+                       href="{{ path('document_history_edit', {'id':document_history.id}) }}">Edit</a>
+                    <form class="d-inline" method="post" action="{{ path('document_history_delete', {'id': document_history.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ document_history.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+{#    <a class="btn btn-success tbn-sm" href="{{ path('document_history_new') }}">New</a>#}
+{% endblock %}
+
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[2, 'desc']],
+                "paging": true,
+                "searching": true,
+                "bInfo": true
+            });
+        });
+    </script>
+{% endblock datatable %}

@@ -1,0 +1,150 @@
+{% if passport is defined %}
+    {% set document = passport %}
+    {% set documentC = 'Passport' %}
+    {% set urldoc = 'passports' %}
+{% endif %}
+
+{% if driving_license is defined %}
+    {% set document = driving_license %}
+    {% set documentC = 'Driving License' %}
+    {% set urldoc = 'driving_license' %}
+{% endif %}
+
+{% if birth_death_marriage_certificate is defined %}
+    {% set document = birth_death_marriage_certificate %}
+    {% set documentC = 'Birth Marriage Death Certificate' %}
+    {% set urldoc = 'birth_death_marriage_certificates' %}
+{% endif %}
+
+{% if financial_statement is defined %}
+    {% set document = financial_statement %}
+    {% set documentC = 'Financial Statement' %}
+    {% set urldoc = 'financial_statements' %}
+{% endif %}
+
+{% if employment_contract is defined %}
+    {% set document = employment_contract %}
+    {% set documentC = 'Employment Contract' %}
+    {% set urldoc = 'employment_contracts' %}
+{% endif %}
+
+{% if health_insurance is defined %}
+    {% set document = health_insurance %}
+    {% set documentC = 'Health Insurance' %}
+    {% set urldoc = 'health_insurance' %}
+{% endif %}
+
+{% if utility_bill is defined %}
+    {% set document = utility_bill %}
+    {% set documentC = 'Utility Bill' %}
+    {% set urldoc = 'utility_bills' %}
+{% endif %}
+
+{% if school_attendance_certificate is defined %}
+    {% set document = school_attendance_certificate %}
+    {% set documentC = 'School Attendance Certificate' %}
+    {% set urldoc = 'school_attendance_certificates' %}
+{% endif %}
+
+{% if tenancy_agreement is defined %}
+    {% set document = tenancy_agreement %}
+    {% set documentC = 'Tenancy Agreement' %}
+    {% set urldoc = 'tenancy_agreements' %}
+{% endif %}
+
+{% if medical is defined %}
+    {% set document = medical %}
+    {% set documentC = 'Medical' %}
+    {% set urldoc = 'medical' %}
+{% endif %}
+
+{% if criminal_record_check is defined %}
+    {% set document = criminal_record_check %}
+    {% set documentC = 'Criminal Record Check' %}
+    {% set urldoc = 'criminal_record_check' %}
+{% endif %}
+
+
+<td style="text-align: left">
+    {#                            <---- Status ---> #}
+    {% if  document.reviewed == "Checked" %}
+        <i title="Checked" style="color: green" class="fa fa-check"></i>
+    {% elseif  document.reviewed == "Fail" %}
+        <i title="Failed" style="color: red" class="fa fa-remove"></i>
+    {% else %}
+        <i title="Pending" style="color: grey" class="fa fa-question-circle"></i> <br>
+    {% endif %}
+    {#                            <---- Buttons ---> #}
+    {% if is_granted('ROLE_STAFF') %}
+        {% if  document.reviewed == "Pending" %}
+            <a class="btn btn-outline-success btn-sm"
+               href="{{ path('transaction_document_update_status', {status:'Checked', documentType:  documentC , id:document.id}) }}">Checked</a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                    data-target="#{{ documentC }}Error{{ document.id }} ">
+                Fail
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="{{ documentC }}Error{{ document.id }} " tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content text-left">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Reason for Fail</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form"
+                                  action="{{ path('transaction_document_update_status',{status:'Fail', documentType:  documentC ,id: document.id}) }}"
+                                  method="POST">
+                                <div class="form-group">
+                                    <select name="errors[]" multiple="multiple" id="errors" class="form-control">
+
+                                        {% for error in documentErrors %}
+                                            {% if error.document ==  documentC %}
+                                                <option value="{{ error.id }}"> {{ error.summaryCheckbox }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button class="btn btn-success"><strong>submit</strong></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <a style="color: gray" title="Revert to Pending"
+               href="{{ path('transaction_document_update_status', {status:'Pending', documentType:  documentC , id: document.id}) }}">
+                <i class="fa fa-arrow-alt-circle-left"></i></a>
+        {% endif %}
+    {% endif %}
+
+</td>
+<td>
+    {% if  document.reviewedBy is not null %}
+        {{ document.reviewedBy.fullName }}
+    {% endif %}
+</td>
+<td>
+    {% if  document.reviewedDate is not null %}
+        {{ document.reviewedDate|date('d-M-Y') }}
+    {% endif %}
+</td>
+<td>
+    {{ document.comments }}
+</td>
+<td>
+    {% for error in  document.standardError %}
+        {{ error.summaryCheckBox }}; <br>
+    {% endfor %}
+</td>
+<td>
+    <a class="btn btn-outline-danger btn-sm"
+       href="{{ path(   urldoc~'_edit', {'id':  document.id}) }}">Edit</a>
+</td>
+<td>
+</td>

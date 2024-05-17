@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Flight stats{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Flight Stats</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="row">
+            <div class="col-3">
+                <a class="btn btn-outline-secondary btn-sm"
+                   href="{{ path('house_guests_flight_price_scrape_all') }}">Scrape</a>
+                Default date range:
+                {{ settings.flightStatsStartDate|date('d-M-Y') }} -
+                {{ settings.flightStatsStartDate|date_modify('+'~ settings.flightStatsDays~'days' )|date('d-M-y') }}
+
+                <a target="_blank" href="{{ path('settings_edit', {id: '1'}) }}"><i style="color:red"
+                                                                                    class="fa fa-pen"></i></a>
+            </div>
+
+            <div class="col-2">
+                <a target="_blank" class="btn btn-outline-primary btn-sm"
+                   href="https://www.hermesairports.com/flight-info/arrivals-and-departures-pfo">PFO Arrivals</a>
+                <a target="_blank" class="btn btn-outline-primary btn-sm"
+                   href="https://www.hermesairports.com/flight-info/arrivals-and-departures-lca">LCA Arrivals</a>
+            </div>
+            <div class="col-3">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-danger btn-sm" href="{{ path('flight_stats_delete_all') }}">Delete</a>
+                    <a class="btn btn-outline-secondary btn-sm" target="_blank"
+                       href="{{ path('flight_destinations_index') }}">Destinations</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>Date</th>
+
+
+            {% for flight_destination in flight_destinations %}
+                {% if is_granted('ROLE_ADMIN') or flight_destination.adminOnly==0 %}
+                    {% if flight_destination.id is even %}
+                        <th style="text-align: center; background-color: lightgrey; border-right: 1px dotted grey">
+                    {% else %}
+                        <th style="text-align: center; background-color: lightgrey">
+                    {% endif %}
+                    <a target="_blank" href="{{ path('flight_destinations_edit', {id:flight_destination.id}) }}">
+                        <span title={{ flight_destination.departureCity }}>{{ flight_destination.departureCode }}</span>
+                        - <br>
+                        <span title={{ flight_destination.arrivalCity }}>{{ flight_destination.arrivalCode }}</span>
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if flight_destination.adminOnly==1 %}
+                            <a href="{{ path('flight_destinations_change_admin_status', {'id':flight_destination.id,'admin':'0'}) }}"><i
+                                        style="color: green" class="fa fa-hat-wizard"></i></a>
+                        {% endif %}
+                        {% if flight_destination.isActive==1 %}
+                            <a href="{{ path('flight_destinations_change_isactive_status', {'id':flight_destination.id,'active':'0'}) }}"><i
+                                        style="color: green" class="fa fa-check"></i></a>
+                        {% endif %}
+                        <a class="btn btn-outline-secondary btn-sm"
+                           href="{{ path('house_guests_flight_price_scrape_one_destination', {id:flight_destination.id}) }}">
+                            <i style="color: red" class="fa fa-download"></i>
+                        </a>
+                        {% if flight_destination.isActive==0 %}
+                            <a href="{{ path('flight_destinations_change_isactive_status', {'id':flight_destination.id,'active':'1'}) }}"><i
+                                        style="color: red" class="fa fa-remove"></i></a>
+                        {% endif %}
+                    {% endif %}
+                    {% if flight_destination.dateStart is not null and flight_destination.dateEnd  is not null and
+                        flight_destination.isActive ==1 %}
+                        <br>{{ flight_destination.dateStart ? flight_destination.dateStart|date('d-M-y') : '' }}
+                        <br>-{{ flight_destination.dateEnd ? flight_destination.dateEnd|date('d-M-y') : '' }}
+                    {% endif %}
+                    {% if flight_destination.lastScraped is not null %}
+                        <hr>Last scraped:<br>{{ flight_destination.lastScraped ? flight_destination.lastScraped|date('d-M-y h:i') : '' }}
+                    {% endif %}
+                {% endif %}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for date in dates %}
+            {% set id = '' %}
+            {% if date|date('D') == "Sat" or date|date('D') == "Sun" %}
+                <tr style="background-color: lightblue">
+            {% else %}
+                <tr>
+            {% endif %}
+
+            <td data-sort={{ date| date('Y-m-d') }}>{{ date | date('D d-M-Y') }}</td>
+
+
+
+            {% for flight_destination in flight_destinations %}
+                {% if flight_destination.dateStart is null and flight_destination.dateStart is null %}
+                    {% set whiteSmokeBackgroundStart = settings.flightStatsStartDate|date('d-M-Y') %}
+                    {% set whiteSmokeBackgroundEnd = settings.flightStatsStartDate|date_modify('+'~ settings.flightStatsDays~'days' )|date('Y-m-d') %}
+                {% else %}
+                    {% set whiteSmokeBackgroundStart = flight_destination.dateStart|date('Y-m-d') %}
+                    {% set whiteSmokeBackgroundEnd = flight_destination.dateEnd|date('Y-m-d') %}
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') or flight_destination.adminOnly==0 %}
+
+                    {% if flight_destination.id is even %}
+                        {% if whiteSmokeBackgroundStart|date('Y-m-d') <= date|date('Y-m-d') and whiteSmokeBackgroundEnd|date('Y-m-d') >= date|date('Y-m-d') and
+                            flight_destination.isActive ==1 %}
+                            <td style="text-align: center; border-right: 1px dotted grey; background-color: whitesmoke">
+                        {% else %}
+                            <td style="text-align: center; border-right: 1px dotted grey; background-color: white">
+                        {% endif %}
+
+                    {% else %}
+                        {% if whiteSmokeBackgroundStart|date('Y-m-d') <= date|date('Y-m-d') and whiteSmokeBackgroundEnd|date('Y-m-d') >= date|date('Y-m-d') and
+                            flight_destination.isActive ==1 %}
+                            <td style="text-align: center; background-color: whitesmoke">
+                        {% else %}
+                            <td style="text-align: center; background-color: white">
+                        {% endif %}
+                    {% endif %}
+
+                    {% for flight in flights %}
+                        {% if flight.date == date and flight.flightFrom==flight_destination.departureCode and flight.flightTo ==flight_destination.arrivalCode %}
+                            {% set URL = "https://www.kayak.co.uk/flights/"~flight.flightFrom~"-"~ flight.flightTo ~"/"~ date|date('Y-m-d')  ~ "?sort=price_a&fs=stops=0" %}
+                            <a target="_blank" href="{{ URL }}">£{{ flight.lowestPrice|number_format('0') }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+                </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                // "ordering": [[0, 'asc']],
+                'ordering': false,
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

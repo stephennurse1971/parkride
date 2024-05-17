@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Tenant</th>
+                <th>Address</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Signed By Mukhtar</th>
+                <th>Rent (€)</th>
+                <th style="text-align: center">Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tenancy_agreement in tenancy_agreements %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('tenancy_agreements_edit', {'id': tenancy_agreement.id}) }}">{{ tenancy_agreement.tenant.fullName }}</a>
+                    </td>
+                    <td>{{ tenancy_agreement.address }}</td>
+                    <td data-sort="{{ tenancy_agreement.startDate|date('Y-m-d') }}">{{ tenancy_agreement.startDate ? tenancy_agreement.startDate|date('d-M-Y') : '' }}</td>
+                    <td data-sort="{{ tenancy_agreement.endDate|date('Y-m-d') }}">{{ tenancy_agreement.endDate ? tenancy_agreement.endDate|date('d-M-Y') : '' }}</td>
+                    <td>{{ tenancy_agreement.signedByMukhtar ? 'Yes' : 'No' }}</td>
+                    <td>{{ tenancy_agreement.rentAmount|number_format(0, '.', ',') }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if tenancy_agreement.file is not empty %}
+                            <a title="{{ tenancy_agreement.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : tenancy_agreement.id, filename: "Tenancy Agreement"}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

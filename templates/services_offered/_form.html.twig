@@ -1,0 +1,38 @@
+<style>
+    .ck-content {
+        height: 500px;
+    }
+</style>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.ranking) }}
+        {{ form_row(form.serviceOffered) }}
+        {{ form_row(form.includeInFooter) }}
+        {{ form_row(form.requiresImmigrationAppointment) }}
+        {{ form_row(form.serviceArea) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.priceUpfront) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.docsPassport) }}
+        {{ form_row(form.docsTenancyAgreement) }}
+        {{ form_row(form.docsUtilityBill) }}
+        {{ form_row(form.docsEmploymentContract) }}
+        {{ form_row(form.docsFinancialStatements) }}
+        {{ form_row(form.docsP60) }}
+        {{ form_row(form.docsBirthMarriageDeathCertificate) }}
+        {{ form_row(form.docsSchoolAttendanceCertificate) }}
+        {{ form_row(form.docsCriminalRecordCheck) }}
+        {{ form_row(form.docsHealthInsurance) }}
+        {{ form_row(form.docsMedical) }}
+        {{ form_row(form.docsDrivingLicense) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.comments) }}
+        {{ form_row(form.officialForm) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsSchoolAttendanceCertificate == 0 %}
+                N/R
+            {% elseif services_offered.docsSchoolAttendanceCertificate == 1 %}
+                {% set school_attendance_certificates_flag = 0 %}
+                {% for school_attendance_certificate in school_attendance_certificates %}
+                    {% if school_attendance_certificate.student == transaction.client %}
+                        {% set school_attendance_certificates_flag = 1 %}
+                        {% if school_attendance_certificate.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('school_attendance_certificates_edit', {'id': school_attendance_certificate.id }) }}"> <i
+                                        title="Reviewed by {{ school_attendance_certificate.reviewedBy.fullName }} on {{ school_attendance_certificate.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif school_attendance_certificate.reviewed == "Pending"  or school_attendance_certificate.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('school_attendance_certificates_edit', {'id': school_attendance_certificate.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif school_attendance_certificate.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('school_attendance_certificates_edit', {'id': school_attendance_certificate.id }) }}"> <i
+                                        title="Reviewed by {{ school_attendance_certificate.reviewedBy.fullName }} on {{ school_attendance_certificate.reviewedDate|date ('d-M-Y') }}. Comments: {{ school_attendance_certificate.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if school_attendance_certificates_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('school_attendance_certificates_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

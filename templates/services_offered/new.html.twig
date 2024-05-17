@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Services Offered{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Services Offered</h1>
+
+    {{ include('services_offered/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('services_offered_index') }}">Return to list</a>
+{% endblock %}

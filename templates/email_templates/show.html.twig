@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Templates{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Email Templates</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ email_template.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ email_template.name }}</td>
+            </tr>
+            <tr>
+                <th>RecipientTo</th>
+                <td>{{ email_template.recipientTo }}</td>
+            </tr>
+            <tr>
+                <th>RecipientCc</th>
+                <td>{{ email_template.recipientCc }}</td>
+            </tr>
+            <tr>
+                <th>Subject</th>
+                <td>{{ email_template.subject }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ email_template.body }}</td>
+            </tr>
+            <tr>
+                <th>SentDateTime</th>
+                <td>{{ email_template.sentDateTime ? email_template.sentDateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>SentFrom</th>
+                <td>{{ email_template.sentFrom }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('email_templates_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('email_templates_edit', {'id': email_template.id}) }}">Edit</a>
+
+    {{ include('email_templates/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emails{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-3">
+            <h1 style="color: red">Emails</h1>
+        </div>
+        <div class="col-3">
+            <a target="_blank" href="{{ path('email_templates_index') }}">Email Templates</a>
+        </div>
+    </div>
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Client</th>
+            <th>Recipient Email</th>
+            <th>Service</th>
+            <th>Stage</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Sender</th>
+            <th>Subject</th>
+            <th>Body</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for email in emails %}
+            <tr>
+                <td>
+                    <a href="{{ path('emails_edit', {'id': email.id}) }}"> {{ email.id }}</a>
+                </td>
+                <td>{{ email.client.fullName }}</td>
+                <td>{{ email.recipientEmail }}</td>
+                <td>
+                    {% if email.service is null %}
+                        TBA
+                    {% else %}
+                        {{ email.service.serviceOffered }}
+                    {% endif %}
+                </td>
+                <td>{{ email.stage }}</td>
+                <td data-sort="{{ email.dateTime|date('Y-m-d H:i') }}">{{ email.dateTime ? email.dateTime|date('d-M-Y') : '' }}</td>
+                <td data-sort="{{ email.dateTime|date('Y-m-d H:i') }}">{{ email.dateTime ? email.dateTime|date('H:i') : '' }}</td>
+                <td>{{ email.sender }}</td>
+                <td>{{ email.subject }}</td>
+                <td title="{{ email.body }}">Email</td>
+                <td>
+                    <form method="post" action="{{ path('emails_delete', {'id': email.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ email.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('emails_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Website Contacts{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Edit: Website Contact</h1>
+
+    {{ include('website_contacts/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-outline-primary" href="{{ path('website_contacts_index') }}">Return to list</a>
+
+    {{ include('website_contacts/_delete_form.html.twig') }}
+{% endblock %}

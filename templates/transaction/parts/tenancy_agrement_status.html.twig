@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsTenancyAgreement == 0 %}
+                N/R
+            {% elseif services_offered.docsTenancyAgreement == 1 %}
+                {% set tenancy_agreements_uploaded_flag = 0 %}
+                {% for tenancy_agreement in tenancy_agreements %}
+                    {% if tenancy_agreement.tenant == transaction.client %}
+                        {% set tenancy_agreements_uploaded_flag = 1 %}
+                        {% if tenancy_agreement.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('tenancy_agreements_edit', {'id': tenancy_agreement.id }) }}"> <i
+                                        title="Reviewed by {{ tenancy_agreement.reviewedBy.fullName }} on {{ tenancy_agreement.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif tenancy_agreement.reviewed == "Pending"  or tenancy_agreement.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('tenancy_agreements_edit', {'id': tenancy_agreement.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif tenancy_agreement.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('tenancy_agreements_edit', {'id': tenancy_agreement.id }) }}"> <i
+                                        title="Reviewed by {{ tenancy_agreement.reviewedBy.fullName }} on {{ tenancy_agreement.reviewedDate|date ('d-M-Y') }}. Comments: {{ tenancy_agreement.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if tenancy_agreements_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('tenancy_agreements_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Immigration Appointments{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Immigration Appointments</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ immigration_appointment.id }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ immigration_appointment.dateTime ? immigration_appointment.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('immigration_appointments_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('immigration_appointments_edit', {'id': immigration_appointment.id}) }}">Edit</a>
+
+    {{ include('immigration_appointments/_delete_form.html.twig') }}
+{% endblock %}

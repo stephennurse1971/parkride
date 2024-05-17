@@ -1,0 +1,21 @@
+{{ form_start(form) }}
+
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.service) }}
+        {{ form_row(form.stage) }}
+        {{ form_row(form.name) }}
+    </div>
+    <div class="col-4">
+        {{ form_row(form.subject) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10">
+        {{ form_row(form.body) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

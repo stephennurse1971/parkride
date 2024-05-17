@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Availability: {{ client.fullName }} {% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Availability: {{ client.fullName }}</h1>
+
+   <div class="row">
+    <div class="col-9"></div>
+    <div class="col-6 col-lg-3">
+        <a class="btn btn-primary btn-sm" href="{{ path('client_availability_reset_all', {clientId: client.id}) }}">Clear all</a>
+    </div>
+   </div>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-4">
+            <div id="demo"></div>
+        </div>
+        <div class="col-2 available-container">
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('calendar/calendar-2/dist/zabuto_calendar.js') }}"></script>
+    <script>
+        let avalability = 0;
+        var data = [];
+        {% for  client_availability in client_availabilities %}
+        avalability = '{{ client_availability.available }}';
+        var date = '{{ client_availability.date|date('Y-m-d') }}';
+        var classname = "bg-danger text-white badge";
+        var title = '{{ client_availability.client.fullName }}';
+
+        if (avalability === '1') {
+            classname = "bg-success text-white badge";
+        }
+        data.push({
+            "date": date,
+            "markup": "<div class='p-2' style='background:#fdedc4' title='" + title + "'><span class='" + classname + "' >[day]</span><div>",
+
+
+        })
+        {% endfor %}
+        console.log(data);
+        $(document).ready(function () {
+            $("#demo").zabuto_calendar({
+                header_format: '[year]  [month]',
+                week_starts: 'sunday',
+                show_days: true,
+                // today_markup: '<span class="badge bg-primary text-white">[day]</span>',
+                navigation_markup: {
+                    prev: '<i class="fas fa-chevron-circle-left"></i>',
+                    next: '<i class="fas fa-chevron-circle-right"></i>'
+                },
+                classname: 'table table-bordered lightgrey-weekends clickable',
+                events: data,
+
+            });
+
+            $('.zabuto-calendar thead tr:nth-child(2) th:nth-child(1)').hide();
+            $('.zabuto-calendar thead tr:nth-child(2) th:nth-child(7)').hide();
+            var sunday_cells = document.querySelectorAll('.zabuto-calendar tbody tr td:nth-child(1)');
+            sunday_cells.forEach((item) => {
+                item.style.display = 'none';
+            })
+            var saturday_cells = document.querySelectorAll('.zabuto-calendar tbody tr td:nth-child(7)');
+            saturday_cells.forEach((item) => {
+                item.style.display = 'none';
+            })
+            var first_row = document.querySelectorAll('.zabuto-calendar tbody tr:nth-child(1) td');
+            var first_row_flag = 0;
+            first_row.forEach((item) => {
+                if (item.innerHTML !== '') {
+                    first_row_flag = 1;
+
+                }
+            });
+            if (first_row_flag === 0) {
+                document.querySelector('.zabuto-calendar tbody tr:nth-child(1)').style.display = 'none';
+            }
+            // $(".zabuto-calendar tbody tr").each(function () {
+            //     $(this).append('<td class="text-center available"><i class="fa fa-check  text-success"></i></td>');
+            // });
+            // $(".zabuto-calendar tbody tr").each(function () {
+            //     $(this).append('<td class="text-center not-available"><i class="fa fa-close text-danger"></i> </td>');
+            // });
+
+            // $('.not-available').click(function () {
+
+            //
+            //     // $(this).prevAll().each(function (){
+            //     //       var data = $(this).text();
+            //     //        if(data != ''){
+            //     //            $(this).click();
+            //     //        }
+            //     // })
+            //
+            // });
+
+
+            $('#demo').on('zabuto:calendar:day', function (e) {
+
+                $.post("/clientavailability/ajax/new/",
+                    {
+                        date: e.value,
+                        client:{{ client.id }}
+                    },
+                    function (data, status) {
+                        location.reload();
+                    });
+            });
+            $('#demo').on('zabuto:calendar:navigate', function (e) {
+
+
+
+                $('.zabuto-calendar thead tr:nth-child(2) th:nth-child(1)').hide();
+                $('.zabuto-calendar thead tr:nth-child(2) th:nth-child(7)').hide();
+                var sunday_cells = document.querySelectorAll('.zabuto-calendar tbody tr td:nth-child(1)');
+                sunday_cells.forEach((item) => {
+                    item.style.display = 'none';
+                })
+                var saturday_cells = document.querySelectorAll('.zabuto-calendar tbody tr td:nth-child(7)');
+                saturday_cells.forEach((item) => {
+                    item.style.display = 'none';
+                })
+                var first_row = document.querySelectorAll('.zabuto-calendar tbody tr:nth-child(1) td');
+                var first_row_flag = 0;
+                first_row.forEach((item, i) => {
+                    if ((item.innerHTML !== '' && i !== 0) || (item.innerHTML !== '' && i !== 6)) {
+                        first_row_flag = 1;
+                    }
+                });
+                // alert(first_row_flag);
+                if (first_row_flag === 0) {
+                    var t = document.querySelector('.zabuto-calendar tbody tr:nth-child(2)');
+                    t.style.display = 'none';
+                }
+                // $(".zabuto-calendar tbody tr").each(function () {
+                //     $(this).append('<td class="text-center available"><i class="fa fa-check  text-success"></i></td>');
+                // });
+                // $(".zabuto-calendar tbody tr").each(function () {
+                //     $(this).append('<td class="text-center not-available"><i class="fa fa-close text-danger"></i> </td>');
+                // });
+            })
+
+
+
+        })
+
+        $(document).on('click','.available',function (){
+            let calendar = $(".zabuto-calendar__navigation__item--header__title").text();
+            const splitCalendar = calendar.split("  ");
+            let year = splitCalendar[0];
+            let month = splitCalendar[1];
+            if(month==='January'){
+                month = '01';
+            }
+            else if(month==='February'){
+                month = '02';
+            }
+            else if(month==='March'){
+                month = '03';
+            }
+            else if(month==='April'){
+                month = '04';
+            }
+            else if(month==='May'){
+                month = '05';
+            }
+            else if(month==='June'){
+                month = '06';
+            }
+            else if(month==='July'){
+                month = '07';
+            }
+            else if(month==='August'){
+                month = '08';
+            }
+            else if(month==='September'){
+                month = '09';
+            }
+            else if(month==='October'){
+                month = '10';
+            }
+            else if(month==='November'){
+                month = '11';
+            }
+            else if(month==='December'){
+                month = '12';
+            }
+
+            $(this).prevAll().each(function () {
+                let day = $(this).text();
+                if (day !== '') {
+                    let date = year + '-' + month + '-' + day;
+
+
+                    $.post("/clientavailability/ajax/new/switch",
+                        {
+                            date: date,
+                            client:{{ client.id }},
+                            switch:1
+                        })
+                }
+
+           })
+            setTimeout(function(){
+                location.reload();
+            },1000);
+
+
+        })
+        $(document).on('click','.not-available',function (){
+            let calendar = $(".zabuto-calendar__navigation__item--header__title").text();
+            const splitCalendar = calendar.split("  ");
+            let year = splitCalendar[0];
+            let month = splitCalendar[1];
+            if(month==='January'){
+                month = '01';
+            }
+            else if(month==='February'){
+                month = '02';
+            }
+            else if(month==='March'){
+                month = '03';
+            }
+            else if(month==='April'){
+                month = '04';
+            }
+            else if(month==='May'){
+                month = '05';
+            }
+            else if(month==='June'){
+                month = '06';
+            }
+            else if(month==='July'){
+                month = '07';
+            }
+            else if(month==='August'){
+                month = '08';
+            }
+            else if(month==='September'){
+                month = '09';
+            }
+            else if(month==='October'){
+                month = '10';
+            }
+            else if(month==='November'){
+                month = '11';
+            }
+            else if(month==='December'){
+                month = '12';
+            }
+
+            $(this).prevAll().each(function () {
+                let day = $(this).text();
+                if (day !== '') {
+                    let date = year + '-' + month + '-' + day;
+                    $.post("/clientavailability/ajax/new/switch",
+                        {
+                            date: date,
+                            client:{{ client.id }},
+                            switch:0
+                        })
+                }
+            })
+            setTimeout(function(){
+                location.reload();
+            },1000);
+        })
+
+
+
+    </script>
+
+{% endblock %}

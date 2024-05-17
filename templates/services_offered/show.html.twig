@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ServicesOffered{% endblock %}
+
+{% block body %}
+    <h1>ServicesOffered</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ services_offered.id }}</td>
+            </tr>
+            <tr>
+                <th>ServiceOffered</th>
+                <td>{{ services_offered.serviceOffered }}</td>
+            </tr>
+            <tr>
+                <th>ServicArea</th>
+                <td>{{ services_offered.servicArea }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_services_offered_index') }}">back to list</a>
+
+    <a href="{{ path('app_services_offered_edit', {'id': services_offered.id}) }}">edit</a>
+
+    {{ include('services_offered/_delete_form.html.twig') }}
+{% endblock %}

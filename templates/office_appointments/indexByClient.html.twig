@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GRTS Appointments - List{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">
+        GRTS Appointments - List
+    </h1>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Client</th>
+            <th>Staff</th>
+        </tr>
+        </thead>
+
+
+        <tbody>
+        {% for office_appointment in office_appointments %}
+        <tr>
+            <td>
+                {{ office_appointment.date|date('d-M-Y') }}
+            </td>
+            <td style="text-align: right">
+                {{ office_appointment.time }}:00
+            </td>
+            <td>
+                {% if office_appointment.client is not empty %}
+                    {{ office_appointment.client.fullName }}
+                {% endif %}
+            </td>
+            <td>
+                {% if office_appointment.staff is not empty %}
+                    {{ office_appointment.staff.fullName }}
+                {% endif %}
+            </td>
+
+            {% endfor %}
+
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc'], [2, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

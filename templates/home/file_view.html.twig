@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tab_title }}{% endblock %}
+
+{% block body %}
+    <style>
+        .file_viewer{
+            min-height: 1500px;
+        }
+    </style>
+    <div class="row justify-content-center">
+        <div class="col-10 text-center" >
+            {% if ext == 'pdf' %}
+                <embed class="file_viewer" src="{{ filepath }}" width="1000px">
+            {% else %}
+                <img src="{{ filepath }}" height="1000px">
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block additionaljs %}
+    <script>
+        var width = $(".col-10").width();
+        $(".file_viewer").attr("width",width)
+      // $(".file_viewer").attr("height",height)
+    </script>
+
+{% endblock additionaljs %}

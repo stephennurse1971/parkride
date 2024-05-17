@@ -1,0 +1,77 @@
+{% if officeOrPIA == 'Office' %}
+    {% set reference = 'office_appointments_index' %}
+{% endif %}
+{% if officeOrPIA == 'PIA' %}
+    {% set reference = 'client_availability_index' %}
+{% endif %}
+
+
+<div class="row">
+
+    <div class="col-md-2">
+        {% if minDate is empty %}
+                <a class="btn btn-primary btn-sm mt-2"
+                   href="{{ path(reference, {'minDate': today|date_modify("-7 days")|date('Y-m-d'), 'maxDate': today|date('Y-m-d'),'week':'week1'}) }}">Previous
+                    week </a>
+        {% else %}
+            <a class="btn btn-outline-primary btn-sm mt-2"
+               href="{{ path(reference, {'minDate': minDate|date_modify("-7 days")|date('Y-m-d'), 'maxDate': minDate|date('Y-m-d'),'week':'week1'}) }}">Previous
+                week</a>
+        {% endif %}
+
+        {% if minDate is empty %}
+            <a class="btn btn-primary btn-sm mt-2 next-week-btn"
+               href="{{ path(reference, {'minDate': nextSunday|date_modify("+1 days")|date('Y-m-d'), 'maxDate': nextSunday|date_modify("+8 days")|date('Y-m-d'),'week':'week1'}) }}">Next
+                Week
+            </a>
+        {% else %}
+            <a class="btn btn-outline-primary btn-sm mt-2"
+               href="{{ path(reference, {'minDate': minDate|date_modify("+7 days")|date('Y-m-d'), 'maxDate': minDate|date_modify("+14 days")|date('Y-m-d'),'week':'week1'}) }}">Next
+                week</a>
+        {% endif %}
+
+
+    </div>
+    <div class="col-md-3">
+        {% if minDate == today|date('Y-m-d') %}
+            <a class="btn btn-primary btn-sm mt-2"
+               href="{{ path(reference, {'minDate': today|date('Y-m-d'), 'maxDate': nextSunday|date('Y-m-d'),'week':'week1'}) }}">This
+                week </a>
+        {% else %}
+            <a class="btn btn-outline-primary btn-sm mt-2"
+               href="{{ path(reference, {'minDate': today|date('Y-m-d'), 'maxDate': nextSunday|date('Y-m-d'),'week':'week1'}) }}">This
+                week</a>
+        {% endif %}
+
+
+    </div>
+    <div class="col-md-2">
+
+        {% include 'template_parts/login_or_register.html.twig' %}
+    </div>
+
+    <div class="col-md-4">
+        {% if minDate is null %}
+            <strong>Date range: </strong> {{ dates[0] |date('d-M-Y') }} - {{ nextSunday |date('d-M-Y') }}
+        {% else %}
+            <strong>Date range: </strong>  {{ minDate|date('d-M-Y') }} - {{ maxDate|date('d-M-Y') }}
+        {% endif %}
+    </div>
+    <div class="col-md-1">
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a class="btn btn-danger btn-sm mt-2"
+               href="{{ path('app_home') }}">Delete All Clients</a>
+        {% endif %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a class="btn btn-danger btn-sm mt-2"
+               href="{{ path('office_appointments_delete_all') }}">Delete All Office Appointment</a>
+            <a class="btn btn-primary btn-sm mt-2"
+               href="{{ path('immigration_appointments_delete_all') }}">Delete All PIA Appointment</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-success btn-sm mt-2"
+               href="{{ path('app_home') }}">Email reminders</a>
+        {% endif %}
+    </div>
+
+</div>

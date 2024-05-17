@@ -1,0 +1,43 @@
+<style>
+    .ck-content {
+        height: 500px;
+    }
+</style>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.companyName) }}
+        {{ form_row(form.companyEmail) }}
+        {{ form_row(form.companyTel) }}
+        {{ form_row(form.companyMobile) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.companyAddress) }}
+        {{ form_row(form.companyAddressCity) }}
+        {{ form_row(form.companyAddressPostalCode) }}
+        {{ form_row(form.companyAddressCountry) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.addressGpsLocation) }}
+        {{ form_row(form.addressInstructions) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.linkedIn) }}
+        {{ form_row(form.facebook) }}
+        {{ form_row(form.instagram) }}
+        {{ form_row(form.twitter) }}
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-10">
+        {{ form_row(form.cms1EN) }}
+        {{ form_row(form.cms2EN) }}
+        {{ form_row(form.cms3EN) }}
+        {{ form_row(form.cms4EN) }}
+        {{ form_row(form.footerText) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

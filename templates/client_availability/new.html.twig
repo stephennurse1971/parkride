@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client Availability{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Client Availability</h1>
+
+    {{ include('client_availability/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('client_availability_index') }}">Return to list</a>
+{% endblock %}

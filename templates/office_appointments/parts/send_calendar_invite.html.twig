@@ -1,0 +1,10 @@
+{% if office_appointment.calendarInvite is not null %}
+    <a title="Send ICS file to: {{ office_appointment.client.email }} . {{ office_appointment.calendarInvite }} . "
+       href="{{ path('generate_ics_file',{'appointmentId':office_appointment.id, officeOrImmigration:'office' }  ) }}">
+        <i style="color: green"
+           class="fa fa-calendar-check"></i></a>
+{% else %}
+    <a title="Send ICS file to: {{ office_appointment.client.email }}"
+       href="{{ path('generate_ics_file',{'appointmentId':office_appointment.id, officeOrImmigration:'office' }  ) }}">
+        <i style="color: red" class="fa fa-calendar-check"></i></a>
+{% endif %}

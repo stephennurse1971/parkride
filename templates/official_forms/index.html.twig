@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Official Forms{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Official Forms</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>File</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for official_form in official_forms %}
+            <tr>
+                <td>{{ official_form.name }}</td>
+                <td data-sort="{{ official_form.date ? official_form.date|date('Y-m-d') : '' }}">{{ official_form.date ? official_form.date|date('d-M-y') : '' }}</td>
+                <td>
+                    {% if official_form.file  is not empty %}
+                        <a title="{{ official_form.file }}" target="_blank"
+                           href="{{ path('attachments_viewfile',{id : official_form.id, filename: "Official Form"}) }}"><i
+                                    class="fa fa-paperclip"></i></a>
+                    {% endif %}
+                    {{ official_form.file }}
+                </td>
+                <td>
+                    <a class="btn btn-outline-danger btn-sm" href="{{ path('official_forms_edit', {'id': official_form.id}) }}">Edit</a>
+                </td>
+                <td>
+                    <form method="post" action="{{ path('official_forms_delete', {'id': official_form.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ official_form.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('official_forms_new') }}">New</a>
+{% endblock %}

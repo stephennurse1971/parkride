@@ -1,0 +1,74 @@
+<style>
+    .ck-content {
+        min-height: 700px;
+    }
+</style>
+{{ form_start(form) }}
+<input type="hidden" name="referer" value="{{ app.request.headers.get('referer') }}">
+<div class="row">
+    <div class="col-12 col-lg-2">
+        <h2 style="color: red">Personal Details</h2>
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.gender) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.dateOfBirth) }}
+
+        <h2 style="color: red">Language Preference</h2>
+        {{ form_row(form.officialFormDisplayLanguage) }}
+    </div>
+    <div class="col-12 col-lg-2">
+        <h2 style="color: red">Contact Details</h2>
+        {{ form_row(form.mobile) }}
+        {{ form_row(form.mobile2) }}
+        {{ form_row(form.landline) }}
+        {{ form_row(form.linkedIn) }}
+        {{ form_row(form.addressStreet) }}
+        {{ form_row(form.addressCity) }}
+        {{ form_row(form.addressPostCode) }}
+        {% if is_granted('ROLE_STAFF') %}
+            <a target="_blank" href="{{ path('countries_new') }}">+</a>
+        {% endif %}
+        {{ form_row(form.addressCountry) }}
+    </div>
+    <div class="col-12 col-lg-4">
+        <h2 style="color: red">Notes</h2>
+        {{ form_row(form.notes) }}
+    </div>
+
+    <div class="col-12 col-lg-2">
+        <div class="password">
+            <h2 style="color: red">Password</h2>
+            {{ form_row(form.password) }}
+        </div>
+        {% if form.roles is defined %}
+            <h2 style="color: red">Roles</h2>
+            {{ form_row(form.roles) }}
+        {% endif %}
+    </div>
+
+
+    {% if form.employeeRank is defined %}
+
+        <div class="col-12 col-lg-2">
+            <h2 style="color: red">Employees</h2>
+            {{ form_row(form.employeeRank) }}
+            {% if user.photo %}
+                {% set loc = asset('administration/employeephotos')~"/"~user.photo %}
+                <a class="btn btn-outline-danger btn-sm" target="_blank"
+                   href="{{ path('user_viewphoto', {'id': user.id}) }}">
+                    <img height="50" width="50" src="{{ loc }}" class="rounded-circle"></a>
+                <a class="btn btn-outline-danger btn-sm" href="{{ path('user_delete_photo',{'id': user.id}) }}">Delete
+                    photo</a>
+
+            {% else %}
+                {{ form_row(form.photo) }}
+            {% endif %}
+        </div>
+
+    {% endif %}
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+

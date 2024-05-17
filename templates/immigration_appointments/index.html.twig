@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Immigration Appointments{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Immigration Appointments</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-danger btn-sm" href="{{ path('immigration_appointments_delete_all') }}">Delete All</a>
+    {% endif %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Chaperone</th>
+            <th>Client</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for immigration_appointment in immigration_appointments %}
+
+            {% if immigration_appointment.date|date('Y-m-d') < today|date('Y-m-d') or immigration_appointment.time < todayHour and immigration_appointment.date|date('Y-m-d') == today|date('Y-m-d') %}
+                <tr style="background-color: whitesmoke">
+                {% set future = 'No' %}
+            {% else %}
+                {% if immigration_appointment.time == todayHour and immigration_appointment.date|date('Y-m-d') == today|date('Y-m-d') %}
+                    <tr style="background-color: lightyellow">
+                {% else %}
+                    <tr>
+                {% endif %}
+            {% endif %}
+
+
+            <td data-sort="{{ immigration_appointment.date|date('Y-m-d') }}">
+                <a href="{{ path('immigration_appointments_edit', {'id': immigration_appointment.id}) }}">{{ immigration_appointment.date ? immigration_appointment.date|date('D d-M-Y') : '' }}</a>
+            </td>
+            <td>
+                {{ immigration_appointment.time ? immigration_appointment.time }}:00h
+            </td>
+            <td>
+                {% if immigration_appointment.chaperone is not null %}
+                    {{ immigration_appointment.chaperone.fullName }}
+                {% endif %}
+            </td>
+            <td>
+                {% if immigration_appointment.client is not null %}
+                    {{ immigration_appointment.client.fullName }}
+                {% endif %}
+            </td>
+            <td>
+                <form method="post"
+                      action="{{ path('immigration_appointments_delete', {'id': immigration_appointment.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ immigration_appointment.id) }}">
+                    <button class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('immigration_appointments_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc'], [1, 'asc'], [2, 'desc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}
+

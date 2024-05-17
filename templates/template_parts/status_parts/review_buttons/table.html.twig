@@ -1,0 +1,35 @@
+{#<td style="text-align: center">#}
+{#    {% if passport.reviewed == "Checked" %}#}
+{#        <i title="Checked" style="color: green" class="fa fa-check"></i>#}
+{#    {% elseif passport.reviewed == "Fail" %}#}
+{#        <i title="Failed" style="color: red" class="fa fa-remove"></i>#}
+{#    {% else %}#}
+{#        <i title="Pending" style="color: grey" class="fa fa-question-circle"></i>#}
+{#    {% endif %}#}
+{#</td>#}
+{#<td>#}
+{#    {% if passport.reviewedBy is not null %}#}
+{#        {{ passport.reviewedBy.fullName }}#}
+{#    {% endif %}#}
+{#</td>#}
+{#<td>#}
+{#    {% if passport.reviewedDate is not null %}#}
+{#        {{ passport.reviewedDate|date('d-M-Y') }}#}
+{#    {% endif %}#}
+{#</td>#}
+{#<td>#}
+{#    {{ passport.comments }}#}
+{#</td>#}
+{#<td>#}
+{#    {% if passport.reviewed == "Pending" %}#}
+{#        <a class="btn btn-outline-success btn-sm" href="">Checked</a>#}
+{#        <a class="btn btn-outline-danger btn-sm" href="">Fail</a>#}
+{#    {% else %}#}
+{#        <a style="color: gray" title="Revert to Pending" href="{{ path('app_home') }}"><i#}
+{#                    class="fa fa-arrow-alt-circle-left"></i></a>#}
+{#    {% endif %}#}
+{#</td>#}
+{#<td>#}
+{#    <a class="btn btn-outline-danger btn-sm" target="_blank"#}
+{#       href="{{ path('passports_edit', {'id': passport.id}) }}">Edit</a>#}
+{#</td>#}

@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Account Holder</th>
+                <th>Bank</th>
+                <th>Date</th>
+                <th>Currency</th>
+                <th>Amount (Local)</th>
+                <th>Amount (€)</th>
+                <th>FX Rate <a target="_blank" href="{{ path('currencies_index') }}">+</a></th>
+                <th style="text-align: center">File</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for financial_statement in financial_statements %}
+                {% set relevantFXRate = '1' %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>{{ financial_statement.accountHolder.fullName }}</td>
+                    <td>
+                        <a href="{{ path('financial_statements_edit', {'id': financial_statement.id}) }}">{{ financial_statement.bank }}</a>
+                    </td>
+                    <td data-sort="financial_statement.date|date('Y-m-d')">{{ financial_statement.date ? financial_statement.date|date('d-M-Y') : '' }}</td>
+                    <td style="text-align: center">{{ financial_statement.currency.currency }}</td>
+
+                    <td style="text-align: right">{{ financial_statement.amount |number_format(0, '.', ',') }}</td>
+
+                    <td style="text-align: right">
+                        {{ (financial_statement.amount *relevantFXRate) |number_format(0, '.', ',') }}</td>
+                    </td>
+                    <td style="text-align: right">
+                        {% for currency in currencies %}
+                            {% if currency.currency == financial_statement.currency.currency %}
+                                {{ currency.fxRate |number_format(4, '.', ',') }}
+                                {% set relevantFXRate = currency.fxRate %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td style="text-align: center;width: 150px">
+                        {% if financial_statement.file is not empty %}
+                            <a title="{{ financial_statement.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : financial_statement.id, filename: 'FinancialStatement'}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

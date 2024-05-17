@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-3">
+        {{ form_row(form.document) }}
+    </div>
+    <div class="col-3">
+        {{ form_row(form.summaryCheckBox) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10">
+        {{ form_row(form.description) }}
+        {{ form_row(form.remedy) }}
+    </div>
+</div>
+{{ form_widget(form) }}
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

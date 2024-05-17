@@ -1,0 +1,82 @@
+<ul class="navbar-nav  bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ path('app_home') }}">
+        <div class="sidebar-brand-icon rotate-n-15">
+        </div>
+        <div class="sidebar-brand-text mx-3 mt-3">TENNIS FINDER</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0"
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item #1 - Availabilities -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAvailability"
+           aria-expanded="true" aria-controls="collapseAvailability">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Availability</span>
+        </a>
+        <div id="collapseAvailability" class="collapse show" aria-labelledby="headingTwo"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+
+
+                {% if app.user %}
+                    {% if app.user.newPlayersInterest == "1" or Venues.clubMembershipOnline(app.user) == true or is_granted('ROLE_ADMIN') %}
+                        <a class="collapse-item text" style="color: red"
+                           href="{{ path('tennis_player_availability_index',{'subset': 'My'}) }}">My
+                            availability</a>
+                        <a class="collapse-item text" style="color: red"
+                           href="{{ path('tennis_player_availability_index',{'subset': 'All'}) }}">Player
+                            availability</a>
+                        <a class="collapse-item text" style="color: red"
+                           href="{{ path('tennis_player_and_courtavailability_index') }}">Courts
+                            & Players</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    <hr class="sidebar-divider">
+
+
+    <!-- Nav Item #2 - Bookings & Accounts -->
+    {% if is_granted('ROLE_TENNIS_PLAYER') %}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBookings"
+               aria-expanded="true" aria-controls="collapseBookingss">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>My Profile</span>
+            </a>
+            <div id="collapseBookings" class="collapse show" aria-labelledby="headingTwo"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item text" href="{{ path('tennis_bookings_index') }}">Bookings</a>
+
+                    {% if app.user %}
+                        <a class="collapse-item"
+                           href="{{ path('player_memberships_index', {player: (TennisPlayers.getPlayerId(app.user)), venue: 'Aphrodite Hills'}) }}">Memberships</a>
+                    {% endif %}
+
+                    <a class="collapse-item text" href="{{ path('user_edit', {id: app.user.id}) }}">Profile</a>
+                    {% if app.user.newPlayersInterest == "1" %}
+                        <hr>
+                        <a target="_blank" class="collapse-item" href="{{ path('user_index_meet_new_player') }}">New
+                            Players</a>
+                        <hr>
+                        <a target="_blank" class="collapse-item"
+                           href="{{ path('tennis_player_individual_connections_index') }}">My Connections</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider">
+    {% endif %}
+
+</ul>

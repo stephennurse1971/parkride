@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit: Documentation Errors{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Edit: Typical Documentation Errors</h1>
+
+    {{ include('documentation_errors/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('documentation_errors_index', {service: 'All'}) }}">Return to list</a>
+
+    {{ include('documentation_errors/_delete_form.html.twig') }}
+{% endblock %}

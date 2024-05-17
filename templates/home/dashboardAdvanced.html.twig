@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+{% block title %}Advanced Dashboard{% endblock %}
+{% block body %}
+    <h1 class="text-danger">Advanced Dashboard</h1>
+    <hr>
+    <a style="background-color: yellow" target="_blank" href="{{ path('dashboard') }}">Standard Dashboard</a>
+    <hr>
+
+    <div class="row">
+        {% if is_granted('ROLE_STAFF') %}
+            <div class="col-2">
+                <div class="border py-4">
+                    <h2 style="color: red">System Admin </h2>
+                    <ul><a target="_blank" href="{{ path('services_offered_index') }}">Services Offered</a></ul>
+                    <ul><a target="_blank" href="{{ path('email_templates_index', {service: 'All'}) }}">Email
+                            templates</a></ul>
+                    <ul></ul>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="border py-4">
+                    <h2 style="color: red">Website CMS</h2>
+                    <ul><a target="_blank" href="{{ path('cms_index') }}">Company Details</a></ul>
+                    <ul><a target="_blank" href="{{ path('cms_dynamic_index') }}">Services, Articles & Static Pages</a>
+                    </ul>
+                    <ul>...</ul>
+                    <ul><a target="_blank" href="{{ path('log_index') }}">User log</a></ul>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="border py-4">
+                    <h2 style="color: red">Competitors</h2>
+                    <ul><a target="_blank" href="{{ path('facebook_groups_index') }}">Facebook Pages</a></ul>
+                    <ul><a target="_blank" href="{{ path('competitors_index') }}">Competitors</a></ul>
+                    <ul><a target="_blank" href="{{ path('competitor_service_index') }}">Competitor Services</a></ul>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="border py-4">
+                    <h2 style="color: red">Staff</h2>
+                    <ul><a target="_blank" href="{{ path('user_index', {status: 'Staff'}) }}">Staff</a></ul>
+                    <ul><a target="_blank" href="{{ path('employee_calendar_set_up_index') }}">Staff Calendar SetUp</a>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="border py-4">
+                    <h2 style="color: red">System Set-Up</h2>
+                    <ul><a target="_blank" href="{{ path('documentation_errors_index', {service: 'All'}) }}">Standard
+                            Documentation Errors</a></ul>
+                    <ul><a target="_blank" href="{{ path('document_guidelines_index' ) }}">Document Guidelines</a></ul>
+                    <ul><a target="_blank" href="{{ path('countries_index') }}">Nationalities</a></ul>
+                    <ul><a target="_blank" href="{{ path('languages_index') }}">Languages</a></ul>
+                    <ul><a target="_blank" href="{{ path('currencies_index') }}">Currencies</a></ul>
+                    <ul><a target="_blank" href="{{ path('car_manufacturers_index') }}">Car manufacturers</a></ul>
+                    <ul><a target="_blank" href="{{ path('official_forms_index') }}">Official Forms</a></ul>
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-2">
+            <div class="border py-4">
+                <h2 style="color: red">Helpful Links </h2>
+                <ul><a target="_blank" href="{{ path('business_contacts_index') }}">Helpful Contacts</a></ul>
+                <ul><a target="_blank" href="{{ path('business_types_index') }}">Business Categories</a></ul>
+                <ul><a target="_blank" href="{{ path('referrals_index') }}">Referrals log</a></ul>
+            </div>
+        </div>
+
+    </div>
+
+    <br><br><br>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+    <script src="{{ asset('admin/js/AGS.js') }}"></script>
+{% endblock javascripts %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                'pageLength': 100,
+                "order": [[2, 'asc'], [3, 'asc'], [4, 'asc']],
+                "paging": true,
+                "searching": true,
+                "bInfo": true
+            });
+        });
+    </script>
+{% endblock datatable %}

@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>Flight Stats</h2>
+        {{ form_row(form.flightStatsDays) }}
+        {{ form_row(form.flightStatsStartDate) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

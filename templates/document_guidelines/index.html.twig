@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Document Guidelines{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Document Guidelines</h1>
+    <div class="row">
+        <div class="col-9">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Document</th>
+                    <th>Guidelines</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for document_guideline in document_guidelines %}
+                    <tr>
+                        <td>
+                            {{ document_guideline.id }}
+                        </td>
+
+                        <td>
+                            <a href="{{ path('document_guidelines_edit', {'id': document_guideline.id}) }}">{{ document_guideline.document }}</a>
+                        </td>
+                        {% set guidelines_sliced = (document_guideline.guidelines|slice(0,400)) %}
+                        {% set guidelines_raw = document_guideline.guidelines|raw  %}
+
+                        <td title="{{ guidelines_raw }}">
+                             {{ guidelines_sliced |raw }}....
+
+                        </td>
+                        <td>
+                            <form method="post" action="{{ path('document_guidelines_delete', {'id': document_guideline.id}) }}"
+                                  onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ document_guideline.id) }}">
+                                <button class="btn btn-danger bt-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+    <a class="btn btn-success btn-sm" href="{{ path('document_guidelines_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

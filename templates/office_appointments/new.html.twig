@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New: Office Appointment{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Office Appointment</h1>
+
+    {{ include('office_appointments/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('office_appointments_index') }}">Return to list</a>
+{% endblock %}

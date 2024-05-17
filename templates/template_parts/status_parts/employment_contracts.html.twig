@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Employee</th>
+                <th>Employer</th>
+                <th>Salary (PCM)</th>
+                <th>Start Date</th>
+                <th>Tenure</th>
+                <th style="text-align: center">Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for employment_contract in employment_contracts %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('employment_contracts_edit', {'id': employment_contract.id}) }}">{{ employment_contract.employee.fullName }}</a>
+                    </td>
+                    <td>{{ employment_contract.employer }}</td>
+                    <td>{{ employment_contract.salaryPerMonth }}</td>
+                    <td data-sort="employment_contract.startDate|date('Y-m-d')">{{ employment_contract.startDate ? employment_contract.startDate|date('d-M-Y') : '' }}</td>
+                    <td>{{ employment_contract.tenure }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if employment_contract.file is not empty %}
+                            <a title="{{ employment_contract.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : employment_contract.id, filename: "Employment Contract"}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>

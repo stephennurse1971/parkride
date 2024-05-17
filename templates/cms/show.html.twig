@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cms{% endblock %}
+
+{% block body %}
+    <h1>Cms</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cm.id }}</td>
+            </tr>
+            <tr>
+                <th>CompanyEmail</th>
+                <td>{{ cm.companyEmail }}</td>
+            </tr>
+            <tr>
+                <th>CompanyTel</th>
+                <td>{{ cm.companyTel }}</td>
+            </tr>
+            <tr>
+                <th>CompanyAddress</th>
+                <td>{{ cm.companyAddress }}</td>
+            </tr>
+            <tr>
+                <th>Cms1EN</th>
+                <td>{{ cm.cms1EN }}</td>
+            </tr>
+            <tr>
+                <th>Cms2EN</th>
+                <td>{{ cm.cms2EN }}</td>
+            </tr>
+            <tr>
+                <th>Cms3EN</th>
+                <td>{{ cm.cms3EN }}</td>
+            </tr>
+            <tr>
+                <th>Cms4EN</th>
+                <td>{{ cm.cms4EN }}</td>
+            </tr>
+            <tr>
+                <th>Facebook</th>
+                <td>{{ cm.facebook }}</td>
+            </tr>
+            <tr>
+                <th>LinkedIn</th>
+                <td>{{ cm.linkedIn }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('cms_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('cms_edit', {'id': cm.id}) }}">Edit</a>
+
+    {{ include('cms/_delete_form.html.twig') }}
+{% endblock %}

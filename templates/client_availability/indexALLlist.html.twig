@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client Availability{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Client Availabilities For Appointments</h1>
+    <a class="btn btn-success btn-sm" href="{{ path('client_availability_new') }}">New</a>
+    <div class="row">
+        <div class="col-3">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Available</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for client_availability in client_availabilities %}
+                    {% if client_availability.date|date('D') != "Sat" and client_availability.date|date('D') != "Sun" %}
+                        {% if client_availability.date|date('Y-m-d') < today|date('Y-m-d') %}
+                            <tr style="background-color: whitesmoke">
+                        {% elseif  client_availability.date|date('Y-m-d') == today|date('Y-m-d') %}
+                            <tr style="background-color: lightyellow">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                        <td data-sort="{{ client_availability.date|date('Y-m-d') }}">
+                            <a href="{{ path('client_availability_edit', {'id': client_availability.id}) }}">{{ client_availability.date|date('D') }}</a>
+                        </td>
+                        <td data-sort="{{ client_availability.date|date('Y-m-d') }}">
+                            <a href="{{ path('client_availability_edit', {'id': client_availability.id}) }}">{{ client_availability.date|date('d-M-Y') }}</a>
+                        </td>
+
+                        <td>
+                            {% if client_availability.client is not null %}
+                                {{ client_availability.client.fullName }}
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center">
+                            {% if client_availability.available == 1 %}
+                                <i style="color: green" class="fa fa-check"></i>
+                            {% else %}
+                                <i style="color: red" class="fa fa-remove"></i>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center">
+                            <form method="post"
+                                  action="{{ path('client_availability_delete', {'id': client_availability.id}) }}">
+                                <input type="hidden" name="_token"
+                                       value="{{ csrf_token('delete' ~ client_availability.id) }}">
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'desc']],
+                "paging": true,
+                "searching": true,
+                "bInfo": true
+            });
+        });
+    </script>
+{% endblock datatable %}
+

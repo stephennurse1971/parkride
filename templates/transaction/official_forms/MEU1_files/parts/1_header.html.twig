@@ -1,0 +1,92 @@
+<style>
+    td {
+        color: black;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+</style>
+<table class="text-center text-dark">
+    <br>
+    <td>
+        <img src="{{ asset('images/form/images/image001.png') }}" height="150px" width="150px">
+    </td>
+    <td>
+
+        <p><strong>
+                {% if greek==TRUE %}
+                    ΥΠΟΥΡΓΕΙΟ ΕΣΩΤΕΡΙΚΩΝ<br>
+                    MINISTRY OF INTERIOR<br>
+                    ΤΜΗΜΑ ΑΡΧΕΙΟΥ ΠΛΗΘΥΣΜΟΥ ΚΑΙ ΜΕΤΑΝΑΣΤΕΥΣΗΣ <br>
+                    CIVIL REGISTRY AND MIGRATION DEPARTMENT<br>
+
+                    Ο περί του Δικαιώματος των Πολιτών της Ένωσης και των Μελών των Οικογενειών τους να
+                    <br> Κυκλοφορούν και να
+
+                         Διαμένουν Ελεύθερα στη Δημοκρατία Νόμος του 2007,<br>
+                    [ΠΑΡΑΡΤΗΜΑ II, Άρθρο 10(4) (α-γ) και (6)]<br>
+                {% endif %}
+                {% if english==TRUE %}
+                The Right of Union Citizens and their Family Members to Move and Reside Freely within the<br> Territory
+                of
+                the Republic of Cyprus Law of 2007,<br>
+                [ANNEX II, Article 10(4) (a-c) and (6)]
+            </strong></p>
+        {% endif %}
+    </td>
+    <td>
+        <img src="{{ asset('images/form/images/image003.png') }}" height="100px" width="150px">
+    </td>
+    </tr>
+
+    <tr>
+        <td colspan="3" style="padding-top:200px">
+            {% if greek==TRUE %}
+                <h4><strong>ΑΙΤΗΣΗ ΓΙΑ ΕΚΔΟΣΗ ΒΕΒΑΙΩΣΗΣ ΕΓΓΡΑΦΗΣ ΠΟΛΙΤΗ ΤΗΣ ΕΝΩΣΗΣ ΚΑΙ ΜΕΛΩΝ ΤΗΣ </strong></h4>
+                <h4><strong> ΟΙΚΟΓΕΝΕΙΑΣ ΤΟΥ ΠΟΥ ΕΙΝΑΙ ΕΠΙΣΗΣ ΠΟΛΙΤΕΣ
+                        ΤΗΣ ΕΝΩΣΗΣ</strong></h4>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding-top:20px">
+            {% if english==TRUE %}
+                <h4><strong>APPLICATION FOR ISSUE OF REGISTRATION CERTIFICATE OF UNION CITIZEN AND<br> HIS/HER FAMILY
+                        MEMBERS ALSO EU
+                        CITIZENS</strong></h4>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding-top:250px">
+            <h5 style="background: #d0cfcc;padding-bottom: 30px;padding-top:5px"><strong>
+                    {% if greek==TRUE %}
+                        Η Αίτηση πρέπει να υποβάλλεται
+                        σε χρονικό διάστημα 4 μηνών το αργότερο από την<br> ημερομηνία εισόδου στην Κυπριακή
+                                                                            Δημοκρατία<br>
+                    {% endif %}
+                    {% if english==TRUE %}
+                        The application must be submitted within a period of 4 months from the date of entry into the
+                        <br>Republic
+                        of Cyprus
+                    {% endif %}
+                </strong></h5>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding-top:20px">
+            <hr style="margin: 0;">
+            <p style="font-size: 14px"><strong>
+                    {% if greek==TRUE %}
+                        ΠΑΡΑΚΑΛΕΙΣΤΕ ΠΡΙΝ ΣΥΜΠΛΗΡΩΣΕΤΕ ΤΗΝ ΠΑΡΟΥΣΑ ΑΙΤΗΣΗ ΝΑ ΣΥΜΒΟΥΛΕΥΤΕΙΤΕ ΤΟΝ
+                        ΟΔΗΓΟ ΣΥΜΠΛΗΡΩΣΗΣ ΤΗΣ ΑΙΤΗΣΗΣ<br>
+                    {% endif %}
+                    {% if english==TRUE %}
+                    PLEASE READ ALL INSTRUCTIONS BEFORE COMPLETING THIS APPLICATION
+                    {% endif %}
+                </strong></p>
+
+        </td>
+    </tr>
+
+    </tbody>
+</table>

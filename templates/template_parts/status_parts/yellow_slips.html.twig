@@ -1,0 +1,65 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Recipient</th>
+        <th>Colour</th>
+        <th>IssueDate</th>
+        <th style="text-align: center">Scan</th>
+        {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for yellow_pink_slip in yellow_pink_slips %}
+        <tr>
+            <td>{{ yellow_pink_slip.recipient.fullName }}</td>
+            <td>
+                <a href="{{ path('yellow_pink_slips_edit', {'id': yellow_pink_slip.id}) }}">{{ yellow_pink_slip.colour }}</a>
+            </td>
+            <td data-sort="{{ yellow_pink_slip.issueDate|date('Y-m-d') }}">{{ yellow_pink_slip.issueDate ? yellow_pink_slip.issueDate|date('d-M-Y') : '' }}</td>
+
+            <td style="text-align: center;width: 150px">
+                {% if yellow_pink_slip.file  is not empty %}
+                    <a title="{{ yellow_pink_slip.file }}" target="_blank" href="{{ path('attachments_viewfile',{id : yellow_pink_slip.id, filename: 'YellowSlip'}) }}"><i class="fa fa-paperclip"></i></a>
+                {% endif %}
+            </td>
+            <td style="text-align: center">
+                {% if yellow_pink_slip.reviewed == "Checked" %}
+                    <i title="Checked" style="color: green" class="fa fa-check"></i>
+                {% elseif yellow_pink_slip.reviewed == "Fail" %}
+                    <i title="Failed" style="color: red" class="fa fa-remove"></i>
+                {% else %}
+                    <i title="Pending" style="color: grey" class="fa fa-question-circle"></i>
+                {% endif %}
+            </td>
+            <td>
+                {% if yellow_pink_slip.reviewedBy is not null %}
+                    {{ yellow_pink_slip.reviewedBy.fullName }}
+                {% endif %}
+            </td>
+            <td>
+                {% if yellow_pink_slip.reviewedDate is not null %}
+                    {{ yellow_pink_slip.reviewedDate|date('d-M-Y') }}
+                {% endif %}
+            </td>
+            <td>
+                {{ yellow_pink_slip.comments }}
+            </td>
+            <td>
+                {% if yellow_pink_slip.reviewed == "Pending" %}
+                    <a class="btn btn-outline-success btn-sm" href="{{ path('transaction_document_update_status', {status:'Checked', documentType: 'Yellow_Slip', id:yellow_pink_slip.id}) }}">Checked</a>
+                    <a class="btn btn-outline-danger btn-sm" href="{{ path('transaction_document_update_status', {status:'Fail', documentType: 'Yellow_Slip', id:yellow_pink_slip.id}) }}">Fail</a>
+                {% else %}
+                    <a style="color: gray" title="Revert to Pending" href="{{ path('transaction_document_update_status', {status:'Pending', documentType: 'Yellow_Slip', id:yellow_pink_slip.id}) }}">
+                        <i class="fa fa-arrow-alt-circle-left"></i></a>
+                {% endif %}
+            </td>
+            <td>
+                <a class="btn btn-outline-danger btn-sm" target="_blank"
+                   href="{{ path('yellow_pink_slips_edit', {'id': yellow_pink_slip.id}) }}">Edit</a>
+            </td>
+
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

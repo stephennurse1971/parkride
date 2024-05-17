@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsEmploymentContract == 0 %}
+                N/R
+            {% elseif services_offered.docsEmploymentContract == 1 %}
+                {% set employment_contracts_uploaded_flag = 0 %}
+                {% for employment_contract in employment_contracts %}
+                    {% if employment_contract.employee == transaction.client %}
+                        {% set employment_contracts_uploaded_flag = 1 %}
+                        {% if employment_contract.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('employment_contracts_edit', {'id': employment_contract.id }) }}"> <i
+                                        title="Reviewed by {{ employment_contract.reviewedBy.fullName }} on {{ employment_contract.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif employment_contract.reviewed == "Pending"  or employment_contract.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('employment_contracts_edit', {'id': employment_contract.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif employment_contract.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('employment_contracts_edit', {'id': employment_contract.id }) }}"> <i
+                                        title="Reviewed by {{ employment_contract.reviewedBy.fullName }} on {{ employment_contract.reviewedDate|date ('d-M-Y') }}. Comments: {{ employment_contract.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if employment_contracts_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('employment_contracts_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

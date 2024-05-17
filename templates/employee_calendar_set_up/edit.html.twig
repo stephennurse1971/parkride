@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Schedule: {{ employee_calendar_set_up.employee.fullName }} {% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Appointment Set-Up {{ employee_calendar_set_up.employee.fullName }}</h1>
+
+    {{ include('employee_calendar_set_up/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('employee_calendar_set_up_index') }}">Return to list</a>
+
+    {{ include('employee_calendar_set_up/_delete_form.html.twig') }}
+{% endblock %}

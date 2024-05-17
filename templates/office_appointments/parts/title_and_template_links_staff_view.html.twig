@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-3">
+        <h1 class="d-inline" style="color: red">GRTS Appointments - Calendar</h1>
+
+            <a target="_blank" href="{{ path('employee_calendar_set_up_index') }}">+</a>
+
+        {% if template_id is not null %}
+            <a target="_blank" href="{{ path('email_templates_edit', {id:template_id.id} ) }}">
+                <i title="Email template to advise clients of their meeting" class="fa fa-envelope"></i>
+            </a>
+        {% else %}
+            <i title="The email template must be named 'Office Appointment" class="fa fa-warning"></i>
+        {% endif %}
+    </div>
+</div>

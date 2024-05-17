@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>User</th>
+                <th>License Number</th>
+                <th>Issue Date</th>
+                <th>Expiry Date</th>
+                <th>Codes</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th style="text-align: center">Scan 1</th>
+                <th style="text-align: center">Scan 2</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for driving_license in driving_licenses %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a target="_blank"
+                           href="{{ path('driving_license_edit', {'id': driving_license.id}) }}">{{ driving_license.drivingLicenseHolder.fullName }}</a>
+                    </td>
+                    <td style="text-align: right">{{ driving_license.licenseNumber }}</td>
+                    <td data-sort="driving_license.issueDate|date('Y-m-d')">{{ driving_license.issueDate ? driving_license.issueDate|date('d-M-Y') : '' }}</td>
+                    <td data-sort="driving_license.expiryDate|date('Y-m-d')">{{ driving_license.expiryDate ? driving_license.expiryDate|date('d-M-Y') : '' }}</td>
+                    <td>{{ driving_license.codes }}</td>
+                    <td>{{ driving_license.firstNameOnLicense }}</td>
+                    <td>{{ driving_license.lastNameOnLicense }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if driving_license.licenseScan1 is not empty %}
+                            <a title="{{ driving_license.licenseScan1 }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : driving_license.id, filename: 'DrivingLicense1'}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if driving_license.licenseScan2 is not empty %}
+                            <a title="{{ driving_license.licenseScan2 }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : driving_license.id, filename: 'DrivingLicense2'}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

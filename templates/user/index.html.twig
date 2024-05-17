@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if status == 'Staff' %}
+        Staff
+    {% else %}
+        Clients - {{ status }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if status == 'Staff' %}
+        <h1 style="color: red">Staff</h1>
+    {% else %}
+        <h1 style="color: red">Clients - {{ status }}</h1>
+        <div class="row">
+            <div class="col-2">
+                <a class="btn btn-success btn-sm" href="{{ path('user_new') }}">New</a>
+            </div>
+            <div class="col-2">
+                {% if status == 'Active' %}
+                    <a class="btn btn-outline-primary btn-sm" href="{{ path('user_index',{status:'All'} ) }}">All</a>
+                {% else %}
+                    <a class="btn btn-outline-primary btn-sm"
+                       href="{{ path('user_index',{status:'Active'} ) }}">Active</a>
+                {% endif %}
+            </div>
+
+            <div class="col-4">
+                <a class="btn btn-outline-primary btn-sm" href="{{ path('users_export') }}">Export to CSV</a>
+                <a class="btn btn-outline-primary btn-sm" href="{{ path('users_import') }}">Import from CSV</a>
+                <a href="{{ asset('administration/import_export/users/user-import-template.csv') }}">(Template)</a>
+            </div>
+        </div>
+        <br>
+    {% endif %}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Mobile1</th>
+            <th>Mobile2</th>
+            <th>Landline</th>
+            <th>Notes</th>
+            {% if status == 'Staff' %}
+                <th></th>
+            {% endif %}
+            {% if status != 'Staff' %}
+                <th>Address</th>
+                <th>Address<br>Country</th>
+                <th>... By</th>
+                <th>Added</th>
+                <th>Actions</th>
+                <th>Availability</th>
+                <th>Pending</th>
+                <th>Completed</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td style="text-align: right">
+                    {% if status != 'Staff' %}
+                        <a target="_blank" href="{{ path('user_edit', {'fullName': user.fullName}) }}">{{ user.id }}</a>
+                    {% else %}
+                        <span style="color: whitesmoke">{{ user.employeeRank }}</span>
+                        {% if user.photo is not null %}
+                            {% set loc = asset('administration/employeephotos')~"/"~user.photo %}
+                            <a class="btn btn-outline-danger btn-sm" target="_blank"
+                               href="{{ path('user_viewphoto', {'id': user.id}) }}">
+                                <img height="50" width="50" src="{{ loc }}" class="rounded-circle"></a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>
+                    {% if user.linkedIN is not null %}
+                        <a href={{ user.linkedIN }} target="_blank"><span
+                                    style="color : #1da1f2; font-size: 16px; padding:6px"><i class="fab fa-linkedin"
+                                                                                             style="font-size:24px"></i> </span></a>
+                    {% endif %}
+                    {% if status == 'Staff' %}
+                        {{ user.email }}
+                    {% else %}
+                        <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if 'ROLE_CLIENT' in user.roles %}
+                        <i title="Client" style="color: grey" class="fas fa-user"></i>
+                    {% endif %}
+                    {% if 'ROLE_STAFF' in user.roles %}
+                        <i title="Staff" style="color: blue" class="fas fa-user"></i>
+                    {% endif %}
+                    {% if 'ROLE_ADMIN' in user.roles %}
+                        <i title="Admin" style="color: red" class="fas fa-user"></i>
+                    {% endif %}
+                    {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                        <i title="Admin" style="color: red" class="fas fa-chalkboard-teacher"></i>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+                    {% if user.mobile is not empty %}
+                        <i class="fa fa-phone" title="{{ user.mobile }}"></i>
+                        <a target="_blank" href="https://wa.me/{{ user.mobile  | replace({' ': ''}) }}">
+                            <i class="fab fa-whatsapp" style="color:green; text-align: center"></i></a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if user.mobile2 is not empty %}
+                        <i class="fa fa-phone" title="{{ user.mobile2 }}"></i>
+                        <a target="_blank" href="https://wa.me/{{ user.mobile2  | replace({' ': ''}) }}">
+                            <i class="fab fa-whatsapp" style="color:green; text-align: center"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+                    {% if user.landline is not empty %}
+                        <a title="{{ user.landline }}" href="tel:{{ user.landline|replace({' ': ''}) }}"><i
+                                    class="fas fa-phone"></i></a>
+                    {% endif %}
+                </td>
+                <td title="{{ user.notes|raw }}" style="text-align: left; width: 150px">
+                    {% set notes = user.notes|slice(0,25) %}
+                    {{ notes|raw }}
+                    {% if user.notes is not empty %}
+                        ...
+                    {% endif %}
+                </td>
+                {% if status == 'Staff' %}
+                    <td>
+                        {% if is_granted('ROLE_STAFF') %}
+                            <a class="btn btn-outline-danger btn-sm" target="_blank"
+                               href="{{ path('user_edit', {'fullName': user.fullName}) }}">Edit</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+                {% if status != 'Staff' %}
+                    <td style="text-align: center">
+                        {% if user.addressStreet is not empty %}
+                            <i class="fa fa-home"
+                               title="{{ user.addressStreet }} {{ user.addressCity }} {{ user.addressPostCode }}"></i>
+                        {% endif %}
+                    </td>
+
+                    <td style="text-align: center">
+                        {% if user.addressCountry is not null %}
+                            {{ user.addressCountry.country }}
+                        {% endif %}
+                    </td>
+                    <td data-sort="{{ user.createdBy }}">
+                        {% if user.createdBy is not empty %}
+                            {% if user.createdBy == "On-Line" %}
+                                <i style="color: gray" class="fa fa-laptop"></i>
+                            {% else %}
+                                <i title="{{ user.createdBy }}" style="color: green" class="fa fa-user"></i>
+
+                                {% if user.createdBy != "On-Line" %}
+                                    {% set fullNameExplode = user.createdBy|split(' ') %}
+                                    {{ fullNameExplode[0]|slice(0,1) }}{{ fullNameExplode[1]|slice(0,1) }}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td data-sort="user.createdAt|date('Y-m-d')">{{ user.createdAt ? user.createdAt|date('d-M-Y') : '' }}</td>
+
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-success dropdown-toggle btn-sm" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transaction
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for service in services %}
+                                    <a class="dropdown-item"
+                                       href="{{ path('transaction_new',{userId:user.id, serviceId:service.id}) }}">{{ service.serviceOffered }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {% set available_dates = [] %}
+                        {% set unavailable_dates = [] %}
+                        {% for client_availability in client_availabilities %}
+                            {% if client_availability.client == user and client_availability.available == 1 and client_availability.date > now %}
+                                {% set available_dates = available_dates|merge([client_availability.date|date('d-M-Y')])  %}
+                            {% endif %}
+                            {% if client_availability.client == user and client_availability.available == 0 and client_availability.date > now %}
+                                {% set unavailable_dates = unavailable_dates|merge([client_availability.date|date('d-M-Y')])  %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% set all_dates_available = '' %}
+                        {% set all_dates_unavailable = '' %}
+                        {% for date in available_dates|sort %}
+                            {% set all_dates_available = all_dates_available~date~', ' %}
+                        {% endfor %}
+                        {% for date in unavailable_dates|sort %}
+                            {% set all_dates_unavailable = all_dates_unavailable~date~', ' %}
+                        {% endfor %}
+                        <i style="color: green" class="fa fa-info" title="{{ all_dates_available }}"></i>
+                        <i style="color: red" class="fa fa-info" title="{{ all_dates_unavailable }}"></i>
+                        <a title="Add client specific availabilities" class="btn btn-primary btn-sm"
+                           target="_blank"
+                           href="{{ path('client_availability_by_client', {clientFullName: user.fullName}) }}">Availability</a>
+                    </td>
+                    <td>
+                        {% for transaction in transactions %}
+                            {% if transaction.client.id == user.id and transaction.status=="Pending" %}
+                                <a target="_blank"
+                                   href="{{ path('transaction_show',{id: transaction.id}) }}">{{ transaction.service.serviceOffered }}
+                                    ({{ transaction.createdAt|date('d-M-y') }})</a>;<br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for transaction in transactions %}
+                            {% if transaction.client.id == user.id and transaction.status=="Complete" %}
+                                <a target="_blank"
+                                   href="{{ path('transaction_show',{id: transaction.id}) }}">{{ transaction.service.serviceOffered }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": true,
+                "searching": true,
+                "bInfo": true
+            });
+        });
+    </script>
+{% endblock datatable %}

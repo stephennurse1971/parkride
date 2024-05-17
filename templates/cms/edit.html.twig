@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CMS{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Edit CMS</h1>
+
+    {{ include('cms/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('cms_index') }}">Return to list</a>
+
+    {{ include('cms/_delete_form.html.twig') }}
+{% endblock %}

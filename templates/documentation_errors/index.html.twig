@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Standard Documentation Errors{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Standard Documentation Errors</h1>
+        <a class="btn btn-primary btn-sm" href="{{ path('documentation_errors_index', {service: 'All'}) }}">All</a>
+    {% for document in list_of_documents %}
+        <a class="btn btn-outline-primary btn-sm" href="{{ path('documentation_errors_index', {service: document}) }}">{{ document }}</a>
+    {% endfor %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Document</th>
+            <th>Summary (Pop-up)</th>
+            <th>Description</th>
+            <th>Remedy</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for documentation_error in documentation_errors %}
+            <tr>
+                <td>{{ documentation_error.document }}</td>
+                <td>
+                    {{ documentation_error.summaryCheckBox }}
+                </td>
+                <td>{{ documentation_error.description }}</td>
+                <td>{{ documentation_error.remedy }}</td>
+                <td>
+                    <form class="d-inline" method="post"
+                          action="{{ path('documentation_errors_delete', {'id': documentation_error.id}) }}"
+                          onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ documentation_error.id) }}">
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </form>
+                    <a target="_blank" class="btn btn-outline-primary btn-sm"
+                       href="{{ path('documentation_errors_edit', {'id': documentation_error.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('documentation_errors_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

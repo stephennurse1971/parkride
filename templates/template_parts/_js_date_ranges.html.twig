@@ -1,0 +1,228 @@
+    <script>
+        $(document).ready(function () {
+
+
+
+            $('.search-action.type').on('click', function (e) {
+                e.preventDefault();
+                preDefined();
+
+                $('.search-action.type').removeClass('selected');
+                $(this).addClass('selected');
+
+                var toChange = $(this).data('type');
+
+                var selector = $('#search_category option[value="'+ toChange +'"]');
+
+                //debugger;
+                selector.prop('selected', true);
+
+                if($('.search-action.year.selected')) {
+                    $('.search-action.year.selected').trigger('click');
+                }
+                if(selector == 'calendaryear'){
+                    var start_date = '20'
+                }
+            });
+
+            $('.search-action.month').on('click', function (e) {
+                e.preventDefault();
+                userDefined();
+
+                if($('.search-action.year.selected')) {
+                    $('.search-action.year.selected').trigger('click');
+                }
+
+                $('.search-action.type').removeClass('selected');
+                $('.search-action.type.userdefined').addClass('selected');
+                $('.search-action.month').removeClass('selected');
+                $(this).addClass('selected');
+
+
+                var selectedMonth = $(this).data('month');
+                var startAtString = $('.datepicker.start-at').val();
+
+                if(!startAtString) {
+                    startAt = new Date();
+                } else {
+                    startAt = new Date(startAtString);
+                }
+
+                var $selector = $('#search_category option[value="userdefined"]');
+                $selector.prop('selected', true);
+
+                startAt.setDate(1);
+                startAt.setMonth(selectedMonth -1);
+                startAtString = startAt.toISOString();
+                endAt = new Date(startAtString);
+                endAt.setMonth(selectedMonth);
+                endAt.setDate(endAt.getDate() - 1);
+                endAtString = endAt.toISOString();
+
+
+                $(".datepicker.start-at").flatpickr({
+                    defaultDate:startAtString,
+                    altInput: true,
+                    altFormat: "d M Y",
+                    //defaultDate: "",
+                    time_24hr: true,
+                    enableTime: false,
+                    noCalendar: false,
+                    dateFormat: "Y-m-d H:i"
+                });
+
+                $(".datepicker.end-at").flatpickr({
+                    defaultDate:endAtString,
+                    altInput: true,
+                    altFormat: "d M Y",
+                    //defaultDate: "",
+                    time_24hr: true,
+                    enableTime: false,
+                    noCalendar: false,
+                    dateFormat: "Y-m-d H:i"
+                });
+
+                $selector.prop('selected', true)
+            });
+
+
+
+            $('.search-action.year').on('click', function (e) {
+                e.preventDefault();
+                preDefined();
+
+                $('.search-action.year').removeClass('selected');
+                $(this).addClass('selected');
+                var year = $(this).data('year');
+                var $selector = $('#search_category').find(":selected");
+                var selectedOption = $selector.val();
+                var ranges;
+
+                if(selectedOption == 'calendaryear') {
+                    ranges = setCalendarRange(year);
+                } else if(selectedOption == 'financialyear') {
+                    ranges = setFinancialRange(year);
+                } else {
+                    ranges = setMonthRange(year);
+                }
+
+                $(".datepicker.start-at").flatpickr({
+                    defaultDate: ranges.start,
+                    altInput: true,
+                    altFormat: "d M Y",
+                    //defaultDate: "",
+                    time_24hr: true,
+                    enableTime: false,
+                    noCalendar: false,
+                    dateFormat: "Y-m-d H:i"
+                });
+
+                $(".datepicker.end-at").flatpickr({
+                    defaultDate: ranges.end,
+                    altInput: true,
+                    altFormat: "d M Y",
+                    //defaultDate: "",
+                    time_24hr: true,
+                    enableTime: false,
+                    noCalendar: false,
+                    dateFormat: "Y-m-d H:i"
+                });
+            });
+
+            function userDefined() {
+                $('.search-action.type').removeClass('selected');
+                $('.search-action.userdefined').addClass('selected');
+            }
+
+            function preDefined() {
+                $('.search-action.month').removeClass('selected');
+            }
+
+
+            function setCalendarRange(year) {
+                startAt = new Date(year);
+                startAt.setDate(1);
+                startAtString = startAt.toISOString();
+                var endAt = new Date(year);
+                endAt.setMonth('11');
+                endAt.setDate(31);
+                var endAtString = endAt.toISOString();
+                return {
+                    'start': startAt,
+                    'end': endAtString
+                }
+            }
+
+            function setFinancialRange(year) {
+                var startAtObject = new Date(year);
+                startAtObject.setDate(1);
+                startAtObject.setMonth(startAtObject.getMonth() - 12);
+                startAtObject.setMonth(9);
+                console.log(startAtObject);
+                var startAtString = startAtObject.toISOString();
+                var endAt = new Date(year);
+                endAt.setMonth('8');
+                endAt.setDate(31);
+                endAt.setDate(endAt.getDate() -1);
+                var endAtString = endAt.toISOString();
+                return {
+                    'start': startAtString,
+                    'end': endAtString
+                }
+            }
+
+
+            function setMonthRange(year) {
+                var startAtObject = new Date(year);
+                startAtObject.setDate(1);
+                var startAtString = startAtObject.toISOString();
+                var endAt = new Date(year);
+                endAt.setDate(31);
+                var endAtString = endAt.toISOString();
+                return {
+                    'start': startAtString,
+                    'end': endAtString
+                }
+            }
+
+
+$(".employer-list-button").click(function (){
+    var employer = $(this).attr('data');
+    if(employer=="All") {
+        $("#search_on_period_employer").val("").change();
+    }
+    else {
+        $("#search_on_period_employer").val(employer).change();
+    }
+
+});
+
+            var period_type = $('#period_type').attr('data');
+           if(period_type){
+
+              $("#id_"+period_type).addClass('btn-danger');
+
+           }
+        });
+
+        $('.employer').click(function () {
+            $('.employer').removeClass('selected');
+           $(this).addClass('selected');
+
+        });
+
+        $('.group-button').click(function () {
+
+            var groupPayment= $('#groupPaymentValue').attr('data');
+
+            if(groupPayment=='split'){
+                $('#search_on_period_groupPayments').val('group');
+            }
+            else{
+                $('#search_on_period_groupPayments').val('split');
+            }
+            $('#submit').click();
+        }) ;
+
+
+    </script>

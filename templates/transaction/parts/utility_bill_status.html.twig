@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsUtilityBill == 0 %}
+                N/R
+            {% elseif services_offered.docsUtilityBill == 1 %}
+                {% set utility_bills_uploaded_flag = 0 %}
+                {% for utility_bill in utility_bills %}
+                    {% if utility_bill.customer == transaction.client %}
+                        {% set utility_bills_uploaded_flag = 1 %}
+                        {% if utility_bill.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('utility_bills_edit', {'id': utility_bill.id }) }}"> <i
+                                        title="Reviewed by {{ utility_bill.reviewedBy.fullName }} on {{ utility_bill.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif utility_bill.reviewed == "Pending" or utility_bill.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('utility_bills_edit', {'id': utility_bill.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif utility_bill.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('utility_bills_edit', {'id': utility_bill.id }) }}"> <i
+                                        title="Reviewed by {{ utility_bill.reviewedBy.fullName }} on {{ utility_bill.reviewedDate|date ('d-M-Y') }}. Comments: {{ utility_bill.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if utility_bills_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('utility_bills_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

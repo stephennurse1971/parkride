@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Address: Immigration Authorities Pathos{% endblock %}
+
+{% block body %}
+    <h4>Address</h4>
+    <a href="{{ path('create_vcard', {id: 8} ) }}"> <i style="color: blue" class="fas fa-address-card mr-0"></i></a>
+    2nd floor, Eleftheriou Venizelou 22, Corner of Eleftheriou Venizelou Ave. & Kaniggos Street, Paphos 8021
+    Google Maps: <a target="_blank" href="https://goo.gl/maps/FyfqRjqN1HZVEDQd6">Link</a>
+    <br>
+    <h4>Directions:</h4>
+    <p>Drive...</p>
+
+    <br>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104822.89334107368!2d32.329594055504224!3d34.813100926656034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14e70661029485e3%3A0x4a22b7c253427c39!2sAliens%20and%20Immigration%20Unit!5e0!3m2!1sen!2s!4v1691665058630!5m2!1sen!2s"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+    <br>
+    <br>
+    <h4>Hours</h4>
+    <p>Mon-Fri: 7.30am - 1.00pm </p>
+
+    <br>
+    <br>
+{% endblock %}

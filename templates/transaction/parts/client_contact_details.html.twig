@@ -1,0 +1,27 @@
+<td>
+    <a target="_blank" title="{{ transaction.client.notes }}"
+       href="{{ path('user_edit', {fullName:transaction.client.fullName}) }}">{{ transaction.client.fullName }} </a>
+    <br>
+    <a title="{{ transaction.client.email }}" href="mailto:{{ transaction.client.email }}"><i
+                class="fa fa-envelope"></i></a>
+
+    {% if transaction.client.mobile is not empty %}
+        <a title="{{ transaction.client.mobile }}" target="_blank"
+           href="https://wa.me/{{ transaction.client.mobile  | replace({' ': ''}) }}">
+            <i class="fab fa-whatsapp" style="color:green; text-align: center"></i></a>
+    {% endif %}
+
+    {% if transaction.client.mobile2 is not empty %}
+        <a title="{{ transaction.client.mobile2 }}" target="_blank"
+           href="https://wa.me/{{ transaction.client.mobile2  | replace({' ': ''}) }}">
+            <i class="fab fa-whatsapp" style="color:green; text-align: center"></i></a>
+    {% endif %}
+
+    {% if transaction.client.landline is not empty %}
+        <a title="{{ transaction.client.landline }}"
+           href="tel:{{ transaction.client.landline|replace({' ': ''}) }}"><i
+                    class="fas fa-phone"></i></a>
+    {% endif %}
+
+
+</td>

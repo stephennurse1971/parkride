@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsMedical == 0 %}
+                N/R
+            {% elseif services_offered.docsMedical == 1 %}
+                {% set medical_uploaded_flag = 0 %}
+                {% for medical in medicals %}
+                    {% if medical.patient == transaction.client %}
+                        {% set medical_uploaded_flag = 1 %}
+                        {% if medical.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('medical_edit', {'id': medical.id }) }}"> <i
+                                        title="Reviewed by {{ medical.reviewedBy.fullName }} on {{ medical.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif medical.reviewed == "Pending" or medical.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('medical_edit', {'id': medical.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif medical.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('medical_edit', {'id': medical.id }) }}"> <i
+                                        title="Reviewed by {{ medical.reviewedBy.fullName }} on {{ medical.reviewedDate|date ('d-M-Y') }}. Comments: {{ medical.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if medical_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('medical_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

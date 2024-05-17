@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emails{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Emails</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ email.id }}</td>
+            </tr>
+            <tr>
+                <th>RecipientName</th>
+                <td>{{ email.recipientName }}</td>
+            </tr>
+            <tr>
+                <th>RecipientEmail</th>
+                <td>{{ email.recipientEmail }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ email.dateTime ? email.dateTime|date('Y-m-d H:i') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Sender</th>
+                <td>{{ email.sender }}</td>
+            </tr>
+            <tr>
+                <th>Subject</th>
+                <td>{{ email.subject }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ email.body }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('emails_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('emails_edit', {'id': email.id}) }}">edit</a>
+
+    {{ include('emails/_delete_form.html.twig') }}
+{% endblock %}

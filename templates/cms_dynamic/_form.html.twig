@@ -1,0 +1,133 @@
+<style>
+    .ck-content {
+        height: 500px;
+    }
+</style>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-3">
+        {{ form_row(form.category) }}
+        {{ form_row(form.webpage) }}
+        {{ form_row(form.articlePage) }}
+        {{ form_row(form.picture) }}
+        </div>
+    <div class="col-3">
+        <button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.titleFR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.titleDE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.titleES) }}
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para1) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para1FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para1DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para1ES) }}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para2) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para2FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para2DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para2ES) }}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para3) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para3FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para3DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para3ES) }}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para4) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para4FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para4DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para4ES) }}
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para5) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para5FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para5DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para5ES) }}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.para6) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para6FR) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para6DE) }}
+    </div>
+    <div class="col-1">
+        {{ form_row(form.para6ES) }}
+    </div>
+</div>
+
+{{ form_end(form) }}

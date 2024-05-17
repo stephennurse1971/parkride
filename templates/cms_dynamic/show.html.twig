@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CMS Dynamic{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">CMS Dynamic</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cms_dynamic.id }}</td>
+            </tr>
+            <tr>
+                <th>WebPage</th>
+                <td>{{ cms_dynamic.webPage }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ cms_dynamic.title }}</td>
+            </tr>
+            <tr>
+                <th>TitleFR</th>
+                <td>{{ cms_dynamic.titleFR }}</td>
+            </tr>
+            <tr>
+                <th>TitleDE</th>
+                <td>{{ cms_dynamic.titleDE }}</td>
+            </tr>
+            <tr>
+                <th>TitleES</th>
+                <td>{{ cms_dynamic.titleES }}</td>
+            </tr>
+            <tr>
+                <th>Para1</th>
+                <td>{{ cms_dynamic.para1 }}</td>
+            </tr>
+            <tr>
+                <th>Para1FR</th>
+                <td>{{ cms_dynamic.para1FR }}</td>
+            </tr>
+            <tr>
+                <th>Para1DE</th>
+                <td>{{ cms_dynamic.para1DE }}</td>
+            </tr>
+            <tr>
+                <th>Para1ES</th>
+                <td>{{ cms_dynamic.para1ES }}</td>
+            </tr>
+            <tr>
+                <th>Para2</th>
+                <td>{{ cms_dynamic.para2 }}</td>
+            </tr>
+            <tr>
+                <th>Para2FR</th>
+                <td>{{ cms_dynamic.para2FR }}</td>
+            </tr>
+            <tr>
+                <th>Para2DE</th>
+                <td>{{ cms_dynamic.para2DE }}</td>
+            </tr>
+            <tr>
+                <th>Para2ES</th>
+                <td>{{ cms_dynamic.para2ES }}</td>
+            </tr>
+            <tr>
+                <th>Para3</th>
+                <td>{{ cms_dynamic.para3 }}</td>
+            </tr>
+            <tr>
+                <th>Para3FR</th>
+                <td>{{ cms_dynamic.para3FR }}</td>
+            </tr>
+            <tr>
+                <th>Para3DE</th>
+                <td>{{ cms_dynamic.para3DE }}</td>
+            </tr>
+            <tr>
+                <th>Para3ES</th>
+                <td>{{ cms_dynamic.para3ES }}</td>
+            </tr>
+            <tr>
+                <th>Para4</th>
+                <td>{{ cms_dynamic.para4 }}</td>
+            </tr>
+            <tr>
+                <th>Para4FR</th>
+                <td>{{ cms_dynamic.para4FR }}</td>
+            </tr>
+            <tr>
+                <th>Para4DE</th>
+                <td>{{ cms_dynamic.para4DE }}</td>
+            </tr>
+            <tr>
+                <th>Para4ES</th>
+                <td>{{ cms_dynamic.para4ES }}</td>
+            </tr>
+            <tr>
+                <th>Para5</th>
+                <td>{{ cms_dynamic.para5 }}</td>
+            </tr>
+            <tr>
+                <th>Para5FR</th>
+                <td>{{ cms_dynamic.para5FR }}</td>
+            </tr>
+            <tr>
+                <th>Para5DE</th>
+                <td>{{ cms_dynamic.para5DE }}</td>
+            </tr>
+            <tr>
+                <th>Para5ES</th>
+                <td>{{ cms_dynamic.para5ES }}</td>
+            </tr>
+            <tr>
+                <th>Para6</th>
+                <td>{{ cms_dynamic.para6 }}</td>
+            </tr>
+            <tr>
+                <th>Para6FR</th>
+                <td>{{ cms_dynamic.para6FR }}</td>
+            </tr>
+            <tr>
+                <th>Para6DE</th>
+                <td>{{ cms_dynamic.para6DE }}</td>
+            </tr>
+            <tr>
+                <th>Para6ES</th>
+                <td>{{ cms_dynamic.para6ES }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('cms_dynamic_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('cms_dynamic_edit', {'id': cms_dynamic.id}) }}">Edit</a>
+
+    {{ include('cms_dynamic/_delete_form.html.twig') }}
+{% endblock %}

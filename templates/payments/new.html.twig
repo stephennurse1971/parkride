@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment: {{ transaction.client.fullName }}{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Payment:</h1>
+    <table>
+        <thead>
+        </thead>
+
+        <tbody>
+        <tr>
+            <th style="width: 150px"><strong>Reference:</strong></th>
+            <td>{{ transaction.id }} </td>
+        </tr>
+
+        <tr>
+            <th style="width: 150px"><strong>Client:</strong></th>
+            <td>{{ transaction.client.fullName }}</td>
+        </tr>
+
+        <tr>
+            <th style="width: 150px"><strong>Service:</strong></th>
+            <td>{{ transaction.service.serviceOffered }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    {{ include('payments/_form.html.twig') }}
+
+{% endblock %}
+
+{% block additionaljs %}
+    <script>
+
+        $('.transaction').css('display','none');
+
+    </script>
+{% endblock %}

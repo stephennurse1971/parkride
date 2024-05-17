@@ -1,0 +1,21 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-3">
+        {{ form_widget(form) }}
+
+        {% if official_form.file is not empty %}
+            <strong>
+                <a title="{{ official_form.file }}" target="_blank"
+                   href="{{ path('attachments_viewfile',{id : official_form.id, filename: official_form.file}) }}">{{ official_form.file }}</a>
+            </strong><br>
+
+            {% if  official_form.file is not empty %}
+                <a class="btn btn-sm btn-danger"
+                   href="{{ path("official_form_delete_uploaded_file",{'id':official_form.id }) }}">Delete file</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

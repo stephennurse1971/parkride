@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsFinancialStatements == 0 %}
+                N/R
+            {% elseif services_offered.docsFinancialStatements == 1 %}
+                {% set financial_statements_uploaded_flag = 0 %}
+                {% for financial_statement in financial_statements %}
+                    {% if financial_statement.accountHolder == transaction.client %}
+                        {% set financial_statements_uploaded_flag = 1 %}
+                        {% if financial_statement.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('financial_statements_edit', {'id': financial_statement.id }) }}"> <i
+                                        title="Reviewed by {{ financial_statement.reviewedBy.fullName }} on {{ financial_statement.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif financial_statement.reviewed == "Pending"  or financial_statement.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('financial_statements_edit', {'id': financial_statement.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif financial_statement.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('financial_statements_edit', {'id': financial_statement.id }) }}"> <i
+                                        title="Reviewed by {{ financial_statement.reviewedBy.fullName }} on {{ financial_statement.reviewedDate|date ('d-M-Y') }}. Comments: {{ financial_statement.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if financial_statements_uploaded_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('financial_statements_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

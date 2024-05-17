@@ -1,0 +1,16 @@
+
+<h1 style="color: red">Appointment
+    {% if app.user is null %}
+        slots available
+    {% else %}
+        (slots available)
+    {% endif %}</h1>
+
+{% if app.user is null %}
+    <p>Please register to start your application process before booking an appointment.</p>
+    <p>We hope to reply to all registrations within an hour. </p>
+    <p>Below shows the slots available. </p>
+    <a href="" style="color: white" class="btn btn-success btn-sm">Register</a>
+    <br>
+    <br>
+{% endif %}

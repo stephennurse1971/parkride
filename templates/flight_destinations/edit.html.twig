@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Flight Route: {{ flight_destination.departureCode }} - {{ flight_destination.arrivalCode }}{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Flight Route: {{ flight_destination.departureCode }} - {{ flight_destination.arrivalCode }}</h1>
+
+    {{ include('flight_destinations/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('flight_destinations_index') }}">Return to list</a>
+
+    {{ include('flight_destinations/_delete_form.html.twig') }}
+{% endblock %}

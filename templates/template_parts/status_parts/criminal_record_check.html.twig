@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Applicant</th>
+                <th>Date</th>
+                <th>Convictions</th>
+                <th>Commentary</th>
+                <th>Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for criminal_record_check in criminal_record_checks %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('criminal_record_check_edit', {'id': criminal_record_check.id}) }}">{{ criminal_record_check.applicant.fullName }}</a>
+                    </td>
+                    <td data-sort="{{ criminal_record_check.date ? criminal_record_check.date|date('Y-m-d') : '' }}">{{ criminal_record_check.date ? criminal_record_check.date|date('d-M-Y') : '' }}</td>
+                    <td>{{ criminal_record_check.convictions ? 'Yes' : 'No' }}</td>
+                    <td>{{ criminal_record_check.convictionsCommentary }}</td>
+                    <td>
+                        {% if criminal_record_check.file is not empty %}
+                            <a title="{{criminal_record_check.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : criminal_record_check.id, filename: 'CriminalRecordCheck'}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ </div>

@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-5">
+        <style>
+            .btn.search-action.selected {
+                background-color: blue !important;
+            }
+        </style>
+        {% if selected_period is defined %}
+            <div id="period_type" data="{{ selected_period }}">
+            </div>
+        {% endif %}
+        <p>
+            <button id="id_calendaryear" class="btn btn-info search-action type calendaryear " data-type="calendaryear">Calendar Year</button>
+            <button id="id_financialyear" class="btn btn-info search-action type financialyear " data-type="financialyear">Financial Year</button>
+            <button id="id_userdefined" class="btn btn-info search-action type userdefined " data-type="userdefined">User Defined</button>
+        </p>
+
+        <p>
+            {% for year in annual_date_period %}
+                <button class="btn btn-info search-action year" data-year="{{ year.format('Y-m-d') }}">{{ year.format('Y') }}</button>
+            {% endfor %}
+        </p>
+        <p class="months d-none">
+            {% for month in months %}
+                <button class="btn btn-info search-action month" data-month="{{ month.format('n') }}">{{ month.format('M') }}</button>
+            {% endfor %}
+        </p>
+    </div>
+
+    <div class="col-md-7">
+{#        {{ form_start(form) }}#}
+{#        {{ form_widget(form) }}#}
+        <button id="submit" type="submit" class="btn btn-primary">Search</button>
+{#        {{ form_end(form) }}#}
+    </div>
+</div>
+
+

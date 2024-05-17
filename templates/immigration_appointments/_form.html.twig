@@ -1,0 +1,20 @@
+<style>
+    .ck-content {
+        height: 500px;
+    }
+</style>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.chaperone) }}
+        {{ form_row(form.client ) }}
+        {{ form_row(form.date) }}
+        {{ form_row(form.time) }}
+        {{ form_row(form.calendarInvite) }}
+        {{ form_row(form.calendarReceipt) }}
+    </div>
+</div>
+
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

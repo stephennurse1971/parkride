@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gwenny's Red Tape Services</title>
+</head>
+
+
+<body>
+<table>
+    <tbody>
+
+    <tr>
+        Dear
+        {% if appointment.client.gender == 'Male' %}
+            Mr.
+        {% else %}
+            Ms.
+        {% endif %}
+        {{ appointment.client.lastName }},
+    </tr>
+    <tr>
+        <td>
+            {{ template.body|raw }}
+        </td>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td>
+            <b> Date:</b> {{ appointment.date|date('d-M-y') }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Time:</b> {{ appointment.time }}:00h
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Subject: {{ template.subject }}
+        </td>
+    </tr>
+    {% if appointment.chaperone is not null %}
+        <tr>
+            <td>
+                <b> Chaperone:</b> {{ appointment.chaperone.fullName }}
+            </td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <a href="{{ path('immigration_appointments_confirm_or_reject_immigration_appointment', {'id': appointment.id, 'status': 'Accept'}) }}" style="background-color: green;border-radius: 15px 15px;color:white;text-decoration: none;border:10px solid green;font-size:16px"><strong>Confirm attendance</strong> </a>
+        <span>&nbsp &nbsp &nbsp &nbsp </span>
+        <a href="{{ path('immigration_appointments_confirm_or_reject_immigration_appointment', {'id': appointment.id, 'status': 'Reject'}) }}"  style="background-color: red;border-radius: 15px 15px;color:white;text-decoration: none;border:10px solid red;font-size:16px"><strong>Unavailable at that time</strong></a>
+
+    </tr>
+
+    <tr>
+        <td>
+            <b>Address is: </b>
+            immigration Office address
+            <br>
+            <br>
+            Google Maps:
+
+            <a target="_blank" href="{{ cms.addressGpsLocation }}">Link</a>
+            <br>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3277.4337722223445!2d32.4140718!3d34.7698538!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14e706ee38b1bd11%3A0xc1593042c9c758b2!2sGwenny&#39;s%20Red%20Tape%20Services!5e0!3m2!1sen!2s!4v1691656575636!5m2!1sen!2s"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            <b>Getting here:</b> <br>
+            <li>
+                Directions to Immigration office
+            </li>
+        </td>
+    </tr>
+
+    </tbody>
+
+
+
+
+

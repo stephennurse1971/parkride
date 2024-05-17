@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Document History{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Document History</h1>
+
+    {{ include('document_history/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('document_history_index') }}">Return to list</a>
+{% endblock %}

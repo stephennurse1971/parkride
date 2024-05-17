@@ -1,0 +1,131 @@
+<div class="row">
+
+    <div class="col-12 col-lg-4">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Ref #:</th>
+                <td>
+                    {% if is_granted('ROLE_STAFF') %}
+                        <a href="{{ path('transaction_edit', {'id': transaction.id}) }}">  {{ transaction.id }}</a>
+                    {% else %}
+                        {{ transaction.id }}
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td>{{ transaction.client.fullName }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Service
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a target="_blank" href="{{ path('services_offered_edit',{id: transaction.service.id}) }}">+</a>
+                    {% endif %}
+                </th>
+                <td>
+                    {{ transaction.service.serviceOffered }}
+                </td>
+                <td></td>
+            <tr>
+                <th>Created</th>
+                <td>{{ transaction.createdAt|date('d-M-Y') }}  {{ transaction.createdBy }}</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 col-lg-4">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Status</th>
+                <td>
+                    {{ transaction.status }}
+                </td>
+                <td>
+                    {% if is_granted('ROLE_STAFF') %}
+                        {% if transaction.status == "Pending" %}
+                            <a class="btn btn-success btn-sm"
+                               href="{{ path('transaction_document_update_status', {status:'Complete', documentType: 'Transaction Record', id:transaction.id}) }}">Set
+                                to Complete</a>
+                            <a class="btn btn-outline-secondary btn-sm"
+                               href="{{ path('transaction_document_update_status', {status:'Abandoned', documentType: 'Transaction Record', id:transaction.id}) }}">Set
+                                to Abdandoned</a>
+                        {% endif %}
+                        {% if transaction.status == "Complete" %}
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="{{ path('transaction_document_update_status', {status:'Pending', documentType: 'Transaction Record', id:transaction.id}) }}">Set
+                                to Pending</a>
+                        {% endif %}
+                        {% if transaction.status == "Abandoned" %}
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="{{ path('transaction_document_update_status', {status:'Pending', documentType: 'Transaction Record', id:transaction.id}) }}">Set
+                                to Pending</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Cost</th>
+                <td>
+                    {{ transaction.service.price|number_format(2, '.', ',') }}:
+                    [Upfront: {{ transaction.service.priceUpfront|number_format(2, '.', ',') }}]
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Client paid
+                    {% if is_granted('ROLE_STAFF') %}
+                        <a title="Payment list" target="_blank"
+                           href="{{ path('payments_index', {transactionId: transaction.id}) }}"><i
+                                    class="fa fa-info-circle"></i></a>
+                    {% endif %}
+                </th>
+                <td>
+                    {% set totalPaid = 0 %}
+                    {% set list_of_payments =[] %}
+                    {% for payment in payments %}
+                        {% if payment.transaction.id == transaction.id %}
+                            {% set totalPaid = totalPaid + payment.amount %}
+                            {{ list_of_payments == [payment.amount] }}
+                        {% endif %}
+                    {% endfor %}
+                    {{ totalPaid|number_format(2, '.', ',') }}
+                </td>
+                <td>
+                    {% set BalanceOwed = transaction.service.price - totalPaid %}
+                    <a target="_blank" class="btn btn-success btn-sm"
+                       href="{{ path('payments_new', {transactionId: transaction.id, balanceOwed: BalanceOwed}) }}">$$</a>
+                </td>
+            </tr>
+            <tr>
+                <th>Balance</th>
+                <td>
+                    {{ BalanceOwed |number_format(2, '.', ',') }}
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    {% if is_granted('ROLE_STAFF') %}
+        <div class="col-2">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Emails</th>
+                    <td>
+                        {% include 'transaction/parts/email_send.html.twig' %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>

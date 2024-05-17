@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Document Guidelines{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Document Guidelines</h1>
+
+    <table class="table">
+        <tbody>
+
+            <tr>
+                <th>Document</th>
+                <td>{{ document_guideline.document }}</td>
+            </tr>
+            <tr>
+                <th>Guidelines</th>
+                <td>{{ document_guideline.guidelines }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('app_document_guidelines_index') }}">Returb to list</a>
+
+    <a href="{{ path('document_guidelines_edit', {'id': document_guideline.id}) }}">Edit</a>
+
+    {{ include('document_guidelines/_delete_form.html.twig') }}
+{% endblock %}

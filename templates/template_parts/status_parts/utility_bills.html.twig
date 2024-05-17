@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Date</th>
+                <th>Utility Provider</th>
+                <th style="text-align: center">Scan</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for utility_bill in utility_bills %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('utility_bills_edit', {'id': utility_bill.id}) }}">{{ utility_bill.customer.fullName }}</a>
+                    </td>
+                    <td>{{ utility_bill.address }}</td>
+                    <td>{{ utility_bill.date ? utility_bill.date|date('Y-m-d') : '' }}</td>
+                    <td>{{ utility_bill.utilityProvider }}</td>
+                    <td>
+                        {% if utility_bill.file is not empty %}
+                            <a title="{{ utility_bill.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : utility_bill.id, filename: "Utility Bill"}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

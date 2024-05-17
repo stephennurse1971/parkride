@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ cms.companyName }}: Address{% endblock %}
+
+{% block body %}
+
+    <h3 style="color: red">Address</h3>
+    <div class="row">
+        <div class="col-12">
+            <b>Address is: </b>
+            {{ cms.companyAddress | raw }}
+            <br>
+            <br>
+            <br>
+
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13109.735787817266!2d32.4166467!3d34.7698494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14e706ee38b1bd11%3A0xc1593042c9c758b2!2sGwenny&#39;s%20Red%20Tape%20Services!5e0!3m2!1sen!2s!4v1694588757553!5m2!1sen!2s"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+
+            <br>
+            <br>
+            <br>
+            <b>Getting here:</b> <br>
+            <li>
+                {{ cms.addressInstructions }}
+            </li>
+        </div>
+    </div>
+{% endblock %}

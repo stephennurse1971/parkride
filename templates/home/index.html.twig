@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    {% if cms is not null %}
+        {{ cms.title }}
+    {% endif %}
+{% endblock %}
+{% block home %}
+    <div class="jumbotron" style="min-height: 100px;vertical-align: middle">
+        <div>
+            {% if cms is not null %}
+                <h1 class="display-4 text-center">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {{ cms.title }}
+                        <a class="btn-outline-danger btn-sm" href="{{ path('cms_dynamic_edit', {'id': cms.id}) }}">
+                            <i class="fa fa-pen"> </i> </a>
+                    {% else %}
+                        {{ cms.title }}
+                    {% endif %}
+                </h1>
+            {% endif %}
+        </div>
+    </div>
+    {% if cms is not null %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <p>{{ cms.para1|raw }}</p>
+                    </div>
+                    <div>
+                        <p>{{ cms.para2|raw }}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p>{{ cms.para3|raw }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p>{{ cms.para4|raw }}</p>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p>{{ cms.para5|raw }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p>{{ cms.para6|raw }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% include 'home/update/contact_us.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,295 @@
+{% extends 'base.html.twig' %}
+{% block title %}PIA Appts & Client Availability{% endblock %}
+{% block body %}
+
+    <div class="row">
+        <div class="col-10">
+            <h1 style="color: red">Immigration Authorities Appointments & Client Availability/Documentation readiness</h1>
+        </div>
+        <div class="col-1">
+            {% if template_id is not null %}
+                <a target="_blank" href="{{ path('email_templates_edit', {id:template_id.id} ) }}">Template</a>
+            {% else %}
+                <i title="The email template must be named Immigration Office Appointment" class="fa fa-warning"></i>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% include 'office_appointments/parts/date_range.html.twig' %}
+    {% for date in dates %}
+        {% if date|date('D') != 'Sat' %}
+            {% if date|date('D') != 'Sun' %}
+                <div class="row">
+                    <div class="col-3">
+                        <h3 style="color: blue" class="d-inline">{{ date|date('D d-M-Y') }}</h3>
+                        <a title="Immigration Appointments" target="_blank"
+                           href="{{ path('immigration_appointments_index') }}">
+                            <i style="color: green" class="fa fa-eye"></i></a>
+
+                        {#                        <---------- First Table ----> #}
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Hour</th>
+                                <th>Clients</th>
+                                <th>Add Slot</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for hour in hours %}
+                            {% set future = 'Yes' %}
+                            {% if date|date('Y-m-d') < today|date('Y-m-d') or hour.hour < todayHour and date|date('Y-m-d') == today|date('Y-m-d') %}
+                            <tr style="background-color: whitesmoke">
+                                {% set future = 'No' %}
+                                {% else %}
+                                {% if hour.hour == todayHour and date|date('Y-m-d') == today|date('Y-m-d') %}
+                            <tr style="background-color: lightyellow">
+                                {% else %}
+                            <tr>
+                                {% endif %}
+                                {% endif %}
+                                <td style="text-align: right" data-sort="{{ hour.sort }}"><b>{{ hour.hour }}.00h</b>
+                                </td>
+                                <td>
+                                    {% for immigration_appointment in immigration_appointments %}
+                                        {% if immigration_appointment.date == date and immigration_appointment.time == hour.hour and future=="Yes" %}
+                                            {% if immigration_appointment.client is null %}
+                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                                        data-target="#bookAppointment{{ immigration_appointment.id }}">
+                                                    Book
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal fade"
+                                                     id="bookAppointment{{ immigration_appointment.id }}" tabindex="-1"
+                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog  modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Available
+                                                                    clients</h5>
+                                                                <button type="button" class="btn-close"
+                                                                        data-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                            </div>
+
+                                                            <div class="modal-body ">
+                                                                {% for client in ClientAvailableAndRelevantTransaction.getClientAvailableAndRelevantTransaction(date) %}
+                                                                    {% if ClientHasFutureImmigrationAppointment.getClientAvailableAndRelevantTransaction(client.id) == false %}
+                                                                        <a class="btn btn-success btn-sm"
+                                                                           href="{{ path('immigration_appointments_add_client', {id: immigration_appointment.id, client: client.id}) }}">{{ client.fullName }}</a>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% else %}
+                                                {{ immigration_appointment.client.fullName }}
+                                                {% if immigration_appointment.chaperone is empty %}
+                                                    <span title="No chaperone selected" style="color: red">!</span>
+                                                {% else %}
+                                                    ({{ immigration_appointment.chaperone.firstName|slice(0,1) }}{{ immigration_appointment.chaperone.lastName|slice(0,1) }})
+                                                {% endif %}
+                                                <a title="Edit or chaperone" target="_blank" title="Edit"
+                                                   href="{{ path('immigration_appointments_edit', {id: immigration_appointment.id}) }}"><i
+                                                            style="color: blue" class="fa fa-pen"></i> </a>
+                                                <a title="Remove client"
+                                                   href="{{ path('immigration_appointments_remove_client', {id: immigration_appointment.id}) }}"><i
+                                                            style="color: red" class="fa fa-remove"></i> </a>
+
+
+                                                <a title="Send calendar invite" href="{{ path('app_home') }}"><i
+                                                            style="color: grey" class="fa fa-calendar"></i> </a>
+
+                                                {% if immigration_appointment.calendarInvite is not null %}
+                                                    <a title="Send ICS file to: {{ immigration_appointment.client.email }} . {{ immigration_appointment.calendarInvite }} . "
+                                                       href="{{ path('generate_ics_file',{'appointmentId':immigration_appointment.id, officeOrImmigration:'immigration' }  ) }}">
+                                                        <i style="color: green" class="fa fa-calendar-check"></i></a>
+                                                {% else %}
+                                                    <a title="Send ICS file to: {{ immigration_appointment.client.email }}"
+                                                       href="{{ path('generate_ics_file',{'appointmentId':immigration_appointment.id, officeOrImmigration:'immigration' }  ) }}">
+                                                        <i style="color: red" class="fa fa-calendar-check"></i></a>
+                                                {% endif %}
+
+
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td style="text-align: center">
+                                    {% if future =="Yes" %}
+                                        <a title="Add an available slot at Immigration Authority"
+                                           class="btn btn-outline-primary btn-sm"
+                                           href="{{ path('immigration_appointments_new_from_client_availability', {date: date|date('Y-m-d'), time: hour.hour}) }}">+</a>
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    {#                    <-----  End of first table ----> #}
+
+                    {#                    <-----  Second table ----> #}
+                    <div class="col-4">
+                        <h3 style="color: blue" class="d-inline">Client Availability</h3>
+                        <a title="Client availability" target="_blank"
+                           href="{{ path('client_availability_index_list') }}">
+                            <i style="color: green" class="fa fa-eye"></i></a>
+                        <div class="d-flex">
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Available</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for client_availability in client_availabilities %}
+                                        {% if client_availability.date == date and client_availability.available == "1" %}
+                                            <tr>
+                                                <td>
+                                                    <a title="Switch to Available" style="color: red"
+                                                       href="{{ path('client_availability_switch',{id:client_availability.id}) }}"><i
+                                                                class="fa fa-arrow-alt-circle-right"></i></a>
+                                                    {{ client_availability.client.fullName }}
+                                                    {% if ClientHasFutureImmigrationAppointment.clientAvailableAndRelevantTransaction(client_availability.client.id) %}
+                                                        <i style="color: green" class="fa fa-check"></i>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Not-Available</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for client_availability in client_availabilities %}
+                                        {% if client_availability.date == date and client_availability.available == "0" %}
+                                            <tr>
+                                                <td>
+                                                    <a title="Switch to Available" style="color: green"
+                                                       href="{{ path('client_availability_switch',{id:client_availability.id}) }}"><i
+                                                                class="fa fa-arrow-alt-circle-left"></i></a>
+                                                    {{ client_availability.client.fullName }}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {#                    <-----  End of second table ----> #}
+                    {#                    <-----  Third table ----> #}
+
+
+                    <div class="col-4">
+                        <h3 style="color: blue" class="d-inline">Immigration applications</h3>
+                        <span> <a target="_blank" title="Pending transactions"
+                                  href="{{ path('transaction_index', {subset: 'Pending', clientName: 'All'}) }}"><i
+                                        style="color: green" class="fa fa-eye"></i></a></span>
+
+                        <div class="d-flex">
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>All Docs Ready</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for transaction in transactions %}
+                                        {% if transaction.service.requiresImmigrationAppointment == 1 and transaction.status == "Pending" and TransactionAllDocsReady.checkStatus(transaction) ==TRUE %}
+                                            <tr>
+                                                <td>
+                                                    <a target="_blank"
+                                                       href="{{ path('transaction_show', {id: transaction.id}) }}"><i
+                                                                style="color: blue" class="fa fa-info-circle"></i></a>
+                                                    {{ transaction.client.fullName }}
+                                                    {% if ClientHasFutureImmigrationAppointment.clientAvailableAndRelevantTransaction(transaction.client.id) %}
+                                                        <i style="color: green" class="fa fa-check"></i>
+                                                    {% endif %}
+                                                    <a target="_blank" title="Check Availability" style="color: grey"
+                                                       href="{{ path('client_availability_by_client',{clientFullName:transaction.client.fullName}) }}"><i
+                                                                class="fa fa-calendar"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Docs Incomplete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for transaction in transactions %}
+                                        {% if transaction.service.requiresImmigrationAppointment == 1 and transaction.status == "Pending" and TransactionAllDocsReady.checkStatus(transaction) ==FALSE %}
+                                            <tr>
+                                                <td>
+                                                    <a target="_blank"
+                                                       href="{{ path('transaction_show', {id: transaction.id}) }}"><i
+                                                                style="color: blue" class="fa fa-info-circle"></i></a>
+                                                    {{ transaction.client.fullName }}
+                                                    {% if ClientHasFutureImmigrationAppointment.clientAvailableAndRelevantTransaction(transaction.client.id) %}
+                                                        <i style="color: green" class="fa fa-check"></i>
+                                                    {% endif %}
+                                                    <a target="_blank" title="Check Availability" style="color: grey"
+                                                       href="{{ path('client_availability_by_client',{clientFullName:transaction.client.fullName}) }}"><i
+                                                                class="fa fa-calendar"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {#                    <-----  End of third table ----> #}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

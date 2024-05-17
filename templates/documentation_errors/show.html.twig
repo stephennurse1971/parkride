@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DocumentationErrors{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Documentation Errors</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ documentation_error.id }}</td>
+            </tr>
+            <tr>
+                <th>SummaryCheckBox</th>
+                <td>{{ documentation_error.summaryCheckBox }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ documentation_error.description }}</td>
+            </tr>
+            <tr>
+                <th>Remedy</th>
+                <td>{{ documentation_error.remedy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('app_documentation_errors_index') }}">Return to list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('app_documentation_errors_edit', {'id': documentation_error.id}) }}">Edit</a>
+
+    {{ include('documentation_errors/_delete_form.html.twig') }}
+{% endblock %}

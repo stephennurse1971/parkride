@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CMS Dynamic{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New CmsDynamic</h1>
+
+    {{ include('cms_dynamic/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary" href="{{ path('cms_dynamic_index') }}">Return to list</a>
+{% endblock %}

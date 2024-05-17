@@ -1,0 +1,17 @@
+<style>
+    .ck-content {
+        height: 500px;
+    }
+</style>
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-2">
+        {{ form_row(form.user) }}
+        {{ form_row(form.createdAt) }}
+        {{ form_row(form.eventKey) }}
+        {{ form_row(form.additionalInfo) }}
+    </div>
+</div>
+
+<button class="btn btn-success btn-sm">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

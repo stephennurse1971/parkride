@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Templates - {{ selected_service }}{% endblock %}
+
+
+{% block body %}
+    <h1 style="color: red">Email Templates - {{ selected_service }}</h1>
+
+    <a class="btn btn-primary btn-sm" href="{{ path('email_templates_index', {service: 'All'}) }}">All</a>
+
+    {% for service in services %}
+        <a class="btn btn-outline-primary btn-sm"
+           href="{{ path('email_templates_index', {service: service.serviceOffered}) }}">{{ service.serviceOffered }}</a>
+    {% endfor %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Stage</th>
+            <th>Service</th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Body</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for email_template in email_templates %}
+            <tr>
+                <td>{{ email_template.stage }}</td>
+                <td>
+                    {% if email_template.service is null %}
+                        TBA
+                    {% else %}
+                        {{ email_template.service.serviceOffered }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ email_template.name }}
+                </td>
+                <td>{{ email_template.subject }}</td>
+                <td style="width: 1050px">{{ email_template.body|raw }}</td>
+                <td>
+                    <a class="btn btn-outline-danger btn-sm" href="{{ path('email_templates_edit', {'id': email_template.id}) }}">Edit</a> <br>
+                                     <form method="post" action="{{ path('email_templates_delete', {'id': email_template.id}) }}"
+                          onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ email_template.id) }}">
+                                         <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('email_templates_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc'], [1, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

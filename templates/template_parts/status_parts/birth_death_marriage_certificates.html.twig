@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Owner</th>
+                <th>Certificate</th>
+                <th>Relative</th>
+                <th style="text-align: center">Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for birth_death_marriage_certificate in birth_death_marriage_certificates %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>{{ birth_death_marriage_certificate.applicant.fullName }}</td>
+                    <td>{{ birth_death_marriage_certificate.type }}</td>
+
+                    <td>{{ birth_death_marriage_certificate.relative }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if birth_death_marriage_certificate.certificateFile is not empty %}
+                            <a title="{{ birth_death_marriage_certificate.certificateFile }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : birth_death_marriage_certificate.id, filename: 'BirthMarriageDeath'}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>

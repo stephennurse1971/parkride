@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CMS Dynamic{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">CMS Dynamic</h1>
+
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>Article/Service</th>
+            <th>Picture</th>
+            <th>Service</th>
+            <th>Title</th>
+            <th>Para1</th>
+            <th>Para2</th>
+            <th>Para3</th>
+            <th>Para4</th>
+            <th>Para5</th>
+            <th>Para6</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cms_dynamic in cms_dynamics %}
+            <tr>
+                <td class="align-text-top">
+                    {{ cms_dynamic.category }}
+                </td>
+                <td>
+                {% if cms_dynamic.picture is not null %}
+                    {% set loc = asset('administration/article_pictures')~"/"~cms_dynamic.picture %}
+                    <a target="_blank"
+                       href="{{ path('articles', {articlePage: cms_dynamic.articlePage}) }}"> <img
+                                height="150" width="150" src="{{ loc }}"></a>
+                {% endif %}
+                </td>
+                <td class="align-text-top">
+                    {% if cms_dynamic.webpage is not null %}
+                        <a href="{{ path('cms_dynamic_edit', {'id': cms_dynamic.id}) }}">{{ cms_dynamic.webpage.id }}. {{ cms_dynamic.webpage.serviceOffered }}</a>
+                    {% endif %}
+
+                    {% if cms_dynamic.articlePage is not null %}
+                        <a href="{{ path('cms_dynamic_edit', {'id': cms_dynamic.id}) }}">{{ cms_dynamic.articlePage }}</a>
+                    {% endif %}
+                </td>
+                <td class="align-text-top">{{ cms_dynamic.title }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para1 |raw }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para2 |raw }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para3 |raw }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para4 |raw }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para5 |raw }}</td>
+                <td class="align-text-top">{{ cms_dynamic.para6 |raw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+    <a class="btn btn-success btn-sm" href="{{ path('cms_dynamic_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc'], [2, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EmployeeCalendarSetUp{% endblock %}
+
+{% block body %}
+    <h1>EmployeeCalendarSetUp</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ employee_calendar_set_up.id }}</td>
+            </tr>
+            <tr>
+                <th>StartTime</th>
+                <td>{{ employee_calendar_set_up.startTime ? employee_calendar_set_up.startTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndTime</th>
+                <td>{{ employee_calendar_set_up.endTime ? employee_calendar_set_up.endTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DayOfWeek</th>
+                <td>{{ employee_calendar_set_up.dayOfWeek }}</td>
+            </tr>
+            <tr>
+                <th>StartDate</th>
+                <td>{{ employee_calendar_set_up.startDate ? employee_calendar_set_up.startDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndDate</th>
+                <td>{{ employee_calendar_set_up.endDate ? employee_calendar_set_up.endDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employee_calendar_set_up_index') }}">back to list</a>
+
+    <a href="{{ path('app_employee_calendar_set_up_edit', {'id': employee_calendar_set_up.id}) }}">edit</a>
+
+    {{ include('employee_calendar_set_up/_delete_form.html.twig') }}
+{% endblock %}

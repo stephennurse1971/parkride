@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+{% block title %}Staff{% endblock %}
+{% block body %}
+    <div class="jumbotron" style="min-height: 100px;vertical-align: middle">
+        <div>
+            <h3 class="display-2 text-center">Our Team</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 m-auto">
+            <div class="row">
+                {% for user in users %}
+                    <div class="col-12 col-lg-6 my-3">
+                        <div class="row">
+                            <div class="col-6 col-lg-3">
+                                {% if user.photo is not null %}
+                                    {% set loc = asset('administration/employeephotos/')~"/"~user.photo %}
+                                    <img height="120" width="120" src="{{ loc }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-9">
+
+
+                                <h5>
+                                    {{ user.fullName }}
+                                </h5>
+                                <div>
+                                    {% if user.notes is not empty %}
+                                        {{ user.notes |raw}}
+                                    {% endif %}
+
+                                    {% if user.email is not empty %}
+                                        <p><a class="d-inline" href="mailto:{{ user.email }}">
+                                                <i class="fas fa-envelope mr-3"> </i></a>
+                                            {{ user.email }}</p>
+                                    {% endif %}
+
+                                    {% if user.landline is not empty %}
+                                        <p><a href="tel:{{ user.landline|replace({' ': ''}) }}">
+                                                <i class="fas fa-phone mr-3"></i></a>
+                                            {{ user.landline }}</p>
+                                    {% endif %}
+
+                                    {% if user.mobile is not empty %}
+                                        <p><a target="_blank"
+                                              href="https://wa.me/{{ user.mobile|replace({' ': ''}) }}">
+                                                <i class="fab fa-whatsapp mr-3"
+                                                   style="color:green; text-align: center"></i></a>
+                                            {{ user.mobile }}</p>
+                                    {% endif %}
+                                    {% if user.linkedIn is not empty %}
+                                        <p><a target="_blank"
+                                              class="btn btn-primary btn-floating footer-social-icon-ln"
+                                              data-hover-rule="color" data-hover-color="#dd3333"
+                                              style="color : #1da1f2; font-size: 8px; padding:4px; background-color: #0082ca"
+                                              href="{{ user.linkedIn }}"
+                                              role="button">
+                                                <i class="fab fa-linkedin-in text-light"></i></a></p>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+{% block title %}Helpful Articles{% endblock %}
+{% block body %}
+    <div class="jumbotron" style="min-height: 50px;vertical-align: middle">
+        <div>
+            <h3 class="display-2 text-center">Helpful Articles </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 m-auto">
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-12 col-lg-6 my-3">
+                        <div class="row">
+                            <div class="col-6 col-lg-3">
+                                {% if article.picture is not null %}
+                                    {% set loc = asset('administration/article_pictures')~"/"~article.picture %}
+                                    <a target="_blank"
+                                       href="{{ path('articles', {articlePage: article.articlePage}) }}"> <img
+                                                class="article-image"
+                                                src="{{ loc }}"></a>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <h5>
+                                    <a target="_blank"
+                                       href="{{ path('articles', {articlePage: article.articlePage}) }}">{{ article.articlePage }}</a>
+                                </h5>
+                                <div>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a target="_blank" href="{{ path('cms_dynamic_edit',{id: article.id}) }}">
+                                            <i class="fa fa-pen"></i>
+                                        </a>
+                                    {% endif %}
+                                    <p>{{ article.title }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 m-auto">
+            <div class="row">
+                <div class="col-12 col-lg-6 my-3">
+                    <div class="row">
+                        <div class="col-6 col-lg-3">
+                                {% set loc = asset('administration/article_pictures/airport.png') %}
+                                <a target="_blank"
+                                   href="{{ path('flight_stats_index' ) }}"> <img
+                                            class="article-image"
+                                            src="{{ loc }}"></a>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <h5>
+                                <a target="_blank"
+                                   href="{{ path('flight_stats_index')}}">Latest prices of flights to/from London </a>
+                            </h5>
+                            <div>
+                                <p>Find the cheapest flight</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12 col-lg-6 m-auto">
+            <div class="row">
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <p> If there is another topic you would like us to cover please email. Our email address is:
+                                <a href="mailto:{{ cmsfooter.getFirstCMS.companyEmail }}">
+                                    {{ cmsfooter.getFirstCMS.companyEmail }}</a>
+                            </p>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

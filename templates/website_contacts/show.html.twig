@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WebsiteContacts{% endblock %}
+
+{% block body %}
+    <h1>WebsiteContacts</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ website_contact.id }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ website_contact.firstName }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ website_contact.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Mobile</th>
+                <td>{{ website_contact.mobile }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ website_contact.notes }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ website_contact.dateTime ? website_contact.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_website_contacts_index') }}">back to list</a>
+
+    <a href="{{ path('app_website_contacts_edit', {'id': website_contact.id}) }}">edit</a>
+
+    {{ include('website_contacts/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,36 @@
+<td style="text-align: center">
+    {% for services_offered in services_offereds %}
+        {% if services_offered.serviceOffered == transaction.service.serviceOffered %}
+            {% if services_offered.docsDrivingLicense == 0 %}
+                N/R
+            {% elseif services_offered.docsDrivingLicense == 1 %}
+                {% set driving_license_upload_flag = 0 %}
+                {% for driving_license in driving_licenses %}
+                    {% if driving_license.drivingLicenseHolder == transaction.client %}
+                        {% set driving_license_upload_flag = 1 %}
+                        {% if driving_license.reviewed == "Checked" %}
+                            <a target="_blank"
+                               href="{{ path('driving_license_edit', {'id': driving_license.id }) }}"> <i
+                                        title="Reviewed by {{ driving_license.reviewedBy.fullName }} on {{ driving_license.reviewedDate|date ('d-M-Y') }}"
+                                        class="fa fa-check" style="color: green"></i></a>
+                        {% elseif driving_license.reviewed == "Pending" or driving_license.reviewed is null %}
+                            <a target="_blank"
+                               href="{{ path('driving_license_edit', {'id': driving_license.id }) }}"> <i
+                                        title="Pending review"
+                                        class="fa fa-question-circle" style="color: gray"></i></a>
+                        {% elseif driving_license.reviewed == "Fail" %}
+                            <a target="_blank"
+                               href="{{ path('driving_license_edit', {'id': driving_license.id }) }}"> <i
+                                        title="Reviewed by {{ driving_license.reviewedBy.fullName }} on {{ driving_license.reviewedDate|date ('d-M-Y') }}. Comments: {{ driving_license.comments|raw }}"
+                                        class="fa fa-remove" style="color: red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if driving_license_upload_flag == 0 %}
+                    <a class="btn btn-outline-dark btn-sm" target="_blank"
+                       href="{{ path('driving_license_new',{'client':transaction.client.fullName}) }}">Upload</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</td>

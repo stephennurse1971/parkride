@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CMS{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">CMS</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="text-align: left">Email</th>
+            <th>Tel</th>
+            <th>Mobile</th>
+            <th>Address</th>
+            <th>CMS #1</th>
+            <th>CMS #2</th>
+            <th>CMS #3</th>
+            <th>CMS #4</th>
+            <th>Footer</th>
+            <th>Facebook</th>
+            <th>LinkedIn</th>
+            <th>Instagram</th>
+            <th>Twitter</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cms in cms %}
+            <tr>
+                <td style="text-align: left" title="{{ cms.companyEmail }}">
+                    <i class="fa fa-envelope"> </i>
+                </td>
+                <td>{{ cms.companyTel }}</td>
+                <td>{{ cms.companyMobile }}</td>
+                <td>
+                    {{ cms.companyAddress }},
+                    {{ cms.companyAddressCity }}
+                    {{ cms.companyAddressPostalCode }}
+                </td>
+                <td title="{{ cms.cms1EN }}">{{ cms.cms1EN|slice(0,10)|raw }}</td>
+                <td title="{{ cms.cms2EN }}">{{ cms.cms2EN|slice(0,10)|raw }}</td>
+                <td title="{{ cms.cms3EN }}">{{ cms.cms3EN|slice(0,10)|raw }}</td>
+                <td title="{{ cms.cms4EN }}">{{ cms.cms4EN|slice(0,10)|raw }}</td>
+                <td title="{{ cms.footerText }}">{{ cms.footerText|slice(0,30)|raw }}</td>
+
+
+                <td style="text-align: center">
+                    {% if cms.facebook is not empty %}
+                        <a target="_blank" title="{{ cms.facebook }}" href="{{ cms.facebook }}">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if cms.linkedIn is not empty %}
+                        <a target="_blank" title="{{ cms.linkedIn }}" href="{{ cms.linkedIn }}">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if cms.instagram is not empty %}
+                        <a target="_blank" title="{{ cms.instagram }}" href="{{ cms.instagram }}">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if cms.twitter is not empty %}
+                        <a target="_blank" title="{{ cms.twitter }}" href="{{ cms.twitter }}">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a class="btn btn-outline-danger btn-sm" href="{{ path('cms_edit', {'id': cms.id}) }}">Edit</a>
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a target="_blank" class="btn btn-success btn-sm" href="{{ path('cms_new') }}">New</a>
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[1, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

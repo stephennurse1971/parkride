@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GRTS Appointments - Calendar{% endblock %}
+
+{% block body %}
+    {% include 'office_appointments/parts/title_and_template_links_staff_view.html.twig' %}
+    {% include 'office_appointments/parts/date_range.html.twig' %}
+
+    {% for date in dates %}
+        {% if date|date('D') != 'Sat' %}
+            {% if date|date('D') != 'Sun' %}
+                <h3 style="color: blue;">{{ date|date('D d-M-Y') }}</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Hour</th>
+                        {% if is_granted('ROLE_STAFF') %}
+                            {% for employee in employees %}
+                                <th style="text-align: right; width: 300px">
+                                    {{ employee.fullName }}
+                                    <a title="{{ employee.email }}" style="color: red" target="_blank"
+                                       href="{{ path('staff') }}"><i class="fa fa-info-circle"></i></a>
+                                    <br>
+                                </th>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                    {% for hour in hours %}
+                    {% set future = 'Yes' %}
+
+                    {% if date|date('Y-m-d') < today|date('Y-m-d') or hour.hour < todayHour and date|date('Y-m-d') == today|date('Y-m-d') %}
+                    <tr style="background-color: whitesmoke">
+                        {% set future = 'No' %}
+                        {% else %}
+                        {% if hour.hour == todayHour and date|date('Y-m-d') == today|date('Y-m-d') %}
+
+                    <tr style="background-color: lightyellow">
+                        {% else %}
+                    <tr>
+                        {% endif %}
+                        {% endif %}
+                        <td style="text-align: right" data-sort="{{ hour.sort }}">
+                            <b>{{ hour.hour }}.00h</b>
+                        </td>
+
+
+                        {% if is_granted('ROLE_STAFF') %}
+                            {% for employee in employees %}
+                                <td style="text-align: right" data-sort="{{ hour.sort }}">
+                                    {% set flag = 0 %}
+                                    {% for office_appointment in office_appointments %}
+                                        {% if office_appointment.staff == employee and office_appointment.time == hour.hour and office_appointment.date == date %}
+                                            {% set flag = 1 %}
+                                            {% if office_appointment.client is null %}
+                                                {% if is_granted('ROLE_STAFF') and future == "Yes" %}
+                                                    <a title="Delete appointment"
+                                                       href="{{ path('office_appointments_remove_appointment', {'id': office_appointment.id} ) }}">
+                                                        <i style="color: red" class="fa fa-remove"></i></a>
+                                                {% endif %}
+                                                {% if app.user is null and future == 'Yes' %}
+                                                    <span style="color: green">Available</span>
+                                                {% elseif is_granted('ROLE_STAFF')  or  FutureOfficeAppointments.getAppointments(app.user) < 1   and future =='Yes' %}
+
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-outline-success btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#bookOfficeAppointment{{ office_appointment.id }}{{ employee.id }}">
+                                                        Book
+                                                    </button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade"
+                                                         id="bookOfficeAppointment{{ office_appointment.id }}{{ employee.id }}"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="exampleModalCenterTitle"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered"
+                                                             role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="exampleModalLongTitle">Book</h5>
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body text-left">
+                                                                    {% for pendingClientList in ClientsWithPendingTransactions.pendingClientList %}
+                                                                        {% if ClientHasFutureOfficeAppointment.getCountOfFutureOfficeAppointments(pendingClientList.id) == false %}
+                                                                            <a href="{{ path('office_appointments_add_client', {id: office_appointment.id, clientId: pendingClientList.id}) }}"
+                                                                               class="btn btn-primary mt-2">{{ pendingClientList.fullName }}</a>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    Available <i title="Only 1 future allowed">*</i>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if is_granted('ROLE_STAFF') %}
+
+                                                    <a target="_blank" title="Edit appointment"
+                                                       href="{{ path('office_appointments_edit', {'id': office_appointment.id} ) }}">
+                                                        <i style="color: orange" class="fa fa-pen"></i></a>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_STAFF') or app.user==office_appointment.client %}
+                                                    <a title="Cancel client"
+                                                       href="{{ path('office_appointments_cancel_appointment', {'id': office_appointment.id} ) }}">
+                                                        <i style="color: grey" class="fa fa-trash"></i></a>
+
+
+                                                    {{ office_appointment.client.fullName }}
+                                                    <a target="_blank" title="Open client's transaction history"
+                                                       href="{{ path('transaction_index', {'clientName': office_appointment.client.fullName, 'subset': 'All'} ) }}">
+                                                        <i class="fa fa-dollar-sign"></i></a>
+
+                                                    {% include 'office_appointments/parts/show_future_bookings_count.html.twig' %}
+
+                                                    {% if is_granted('ROLE_STAFF') %}
+                                                        {% include 'office_appointments/parts/open_client_transactions.html.twig' %}
+                                                        {% include 'office_appointments/parts/send_calendar_invite.html.twig' %}
+                                                        {% include 'office_appointments/parts/switch_staff.html.twig' %}
+                                                    {% endif %}
+                                                {% else %}
+
+                                                    <span style="color: red">Booked</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if flag == 0 and is_granted('ROLE_STAFF') and future=="Yes" %}
+                                        <a href="{{ path('office_appointments_new_from_calendar', {'date': date|date('Y-m-d')  , 'time': hour.hour, 'staffId': employee.id}) }}"><i
+                                                    class="fa fa-plus"></i></a>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% endfor %}
+
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc'], [2, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+
+
+        });
+    </script>
+{% endblock datatable %}
+{% block additionaljs %}
+    <script>
+        $(document).ready(function () {
+
+            {#            {% if today|date('D') == 'Sun' %} #}
+            {#            $(".next-week-btn")[0].click(); #}
+            {#            {% endif %} #}
+
+            {#            {% if today|date('D') == 'Sat' %} #}
+            {#            $(".next-week-btn")[0].click(); #}
+            {#            {% endif %} #}
+        })
+    </script>
+{% endblock %}

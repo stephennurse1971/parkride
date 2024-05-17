@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Emails{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Emails</h1>
+
+    {{ include('emails/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('emails_index') }}">Return to list</a>
+{% endblock %}

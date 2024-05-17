@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Appointments Calendar{% endblock %}
+
+{% block body %}
+    <style>
+        .hour-column, .hour-head {
+            position: absolute;
+            z-index: 1000;
+            border-right: 1px solid !important;
+            width: 100px;
+            text-align: left !important;
+        }
+
+        .hour-head {
+            background-color: #f1efea;
+            height: 130px;
+            /*border:none!important;*/
+
+        }
+
+        .hour-column {
+            background-color: white;
+            height: 50px;
+
+        }
+
+        .data-column, .data-head-column {
+            z-index: -1;
+            width: 150px;
+        }
+
+        .data-head-column {
+            height: 130px;
+        }
+
+        .data-column {
+            height: 50px;
+        }
+    </style>
+    {% include 'office_appointments/parts/title_and_template_links_client_view.html.twig' %}
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="hour-head">Hour</th>
+                {% for date in dates %}
+                    {% if date|date('D') != 'Sat' %}
+                        {% if date|date('D') != 'Sun' %}
+                            {% if date|date('D')== 'Fri' %}
+                                <th class="data-head-column" style="border-right: dotted ">
+                            {% else %}
+                                <th class="data-head-column">
+                            {% endif %}
+                            {{ date|date('D') }}<br>
+                            {{ date|date('d-M-y') }}
+                            </th>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+
+
+            <tbody>
+            {% for hour in hours %}
+                <tr>
+                    <td class="hour-column" style="text-align: right" data-sort="{{ hour.sort }}">
+                        <b>{{ hour.hour }}.00h</b>
+                    </td>
+                    {% for date in dates %}
+                        {% if date>=today %}
+                            {% set future = "Yes" %}
+                        {% endif %}
+
+                        {% if date|date('D') != 'Sat' %}
+                            {% if date|date('D') != 'Sun' %}
+                                {% if date|date('D')== 'Fri' %}
+                                    <td class="data-column"
+                                        style="width:50px; border-right: dotted; text-align: center ">
+                                {% else %}
+                                    <td class="data-column" style="width:50px; text-align: center">
+                                {% endif %}
+
+                                {% if app.user is null %}
+                                    {% if CountBookingSlots.bookingSlots(date, hour.hour) >0 %}
+                                        <a class="btn btn-outline-success btn-sm">Book {login}</a>
+                                        {#                                    {{ CountBookingSlots.bookingSlots(date, hour.hour) }} #}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if app.user is not null %}
+                                    {% if CountBookingSlots.bookingSlots(date, hour.hour) >0 %}
+                                        {% if FutureOfficeAppointments.getAppointments(app.user) < 1 %}
+                                            <a class="btn btn-outline-success btn-sm"
+                                               href="{{ path('office_appointments_add_client', {id:CountBookingSlots.findBookingId(date, hour.hour) , clientId: app.user.id}) }}">
+                                                Book-x ({{ (CountBookingSlots.bookingSlots(date, hour.hour)) }})</a>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% for office_appointment in office_appointments %}
+                                        {% if office_appointment.time == hour.hour and office_appointment.date == date and office_appointment.client is not null and office_appointment.client == app.user %}
+                                            <a style="color: red"
+                                               href="{{ path('office_appointments_cancel_appointment', {id: office_appointment.id}) }}"><i
+                                                        class="fa fa-trash"></i></a>
+                                            <span style="color: red; background-color: lightyellow">{{ office_appointment.client.fullName }}</span>
+                                            <br>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if FutureOfficeAppointments.getAppointments(app.user) >0 %}
+                                        {% if OfficeAppointmentsByClientForDateAndHour.countAppointments(app.user,date,hour.hour) == 0 and CountBookingSlots.bookingSlots(date, hour.hour) >0 %}
+                                            <a class="btn btn-outline-success" href="">Available
+                                                ({{ (FutureOfficeAppointmentsThatAreAvailable.countAppointments(date, hour.hour)) }}
+                                                )
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
+
+{% block additionaljs %}
+    <script>
+        $("table tr td:nth-child(2)").each(function () {
+            $(this).css({"padding-left": "140px", "width": "300px"});
+        });
+        $("table tr th:nth-child(2)").each(function () {
+            $(this).css({"padding-left": "140px", "width": "300px"});
+        });
+    </script>
+
+{% endblock %}

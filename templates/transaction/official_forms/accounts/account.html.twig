@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+    {% include 'transaction/official_forms/accounts/parts/introduction.html.twig' %}
+    {% include 'transaction/official_forms/accounts/parts/self_certification.html.twig' %}
+    {% include 'transaction/official_forms/accounts/parts/financial.html.twig' %}
+    {% include 'transaction/official_forms/accounts/parts/others.html.twig' %}
+    {% include 'transaction/official_forms/accounts/parts/banking.html.twig' %}
+    {% include 'transaction/official_forms/accounts/parts/wealth.html.twig' %}
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ transaction.client.fullName }}: {{ transaction.service.serviceOffered }}{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">{{ transaction.client.fullName }}: {{ transaction.service.serviceOffered }}</h1>
+
+    {% include 'transaction/parts/transaction_show/summary_status.html.twig' %}
+
+
+
+
+    {% if 'Passport' in docs %}
+        <h3 style="color: red;">Passports</h3>
+        {% if passports is not empty %}
+            {% include 'template_parts/status_parts/passport.html.twig' %}
+        {% else %}
+            <a href="{{ path('passports_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Passport</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Birth Marriage Death Certificates' in docs %}
+        <h3 style="color: red;">Birth, Marriage or Death Certificates</h3>
+        {% if birth_death_marriage_certificates is not empty %}
+            {% include 'template_parts/status_parts/birth_death_marriage_certificates.html.twig' %}
+        {% else %}
+            <a href="{{ path('birth_death_marriage_certificates_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Birth/Marriage/Death Certificate</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Criminal Record Check' in docs %}
+        <h3 style="color: red;">Criminal Record Check</h3>
+        {% if criminal_record_checks is not empty %}
+            {% include 'template_parts/status_parts/criminal_record_check.html.twig' %}
+        {% else %}
+            <a href="{{ path('criminal_record_check_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Criminal Record Check</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Driving License' in docs %}
+        <h3 style="color: red;">Driving License</h3>
+        {% if driving_licenses is not empty %}
+            {% include 'template_parts/status_parts/driving_license.html.twig' %}
+        {% else %}
+            <a href="{{ path('driving_license_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add driving license</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Employment Contract' in docs %}
+        <h3 style="color: red;">Employment Contract</h3>
+        {% if employment_contracts is not empty %}
+            {% include 'template_parts/status_parts/employment_contracts.html.twig' %}
+        {% else %}
+            <a href="{{ path('employment_contracts_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Employment Contract</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Financial Statements' in docs %}
+        <h3 style="color: red;">Financial Statements</h3>
+        {% if financial_statements is not empty %}
+            {% include 'template_parts/status_parts/financial_statements.html.twig' %}
+        {% else %}
+            <a href="{{ path('financial_statements_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Financial Statement</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Health Insurance' in docs %}
+        <h3 style="color: red;">Health Insurance</h3>
+        {% if health_insurances is not empty %}
+            {% include 'template_parts/status_parts/health_insurance.html.twig' %}
+        {% else %}
+            <a href="{{ path('health_insurance_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Health Insurance</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Medical' in docs %}
+        <h3 style="color: red;">Medical</h3>
+        {% if medicals is not empty %}
+            {% include 'template_parts/status_parts/medical.html.twig' %}
+        {% else %}
+            <a href="{{ path('medical_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Medical</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'School Attendance Certificate' in docs %}
+        <h3 style="color: red;">School Attendance Certificate</h3>
+        {% if school_attendance_certificates is not empty %}
+            {% include 'template_parts/status_parts/school_attendance_certificates.html.twig' %}
+        {% else %}
+            <a href="{{ path('school_attendance_certificates_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add School Attendance Certificate</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Tenancy Agreement' in docs %}
+        <h3 style="color: red;">Tenancy Agreement</h3>
+        {% if tenancy_agreements is not empty %}
+            {% include 'template_parts/status_parts/tenancy_agreements.html.twig' %}
+        {% else %}
+            <a href="{{ path('tenancy_agreements_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Tenancy Agreement</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Utility Bill' in docs %}
+        <h3 style="color: red;">Utility Bills</h3>
+        {% if utility_bills is not empty %}
+            {% include 'template_parts/status_parts/utility_bills.html.twig' %}
+        {% else %}
+            <a href="{{ path('utility_bills_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Utility Bill</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+    {% if 'Yellow Slips' in docs %}
+        <h3 style="color: red;">Yellow Slips</h3>
+        {% if yellow_pink_slips is not empty %}
+            {% include 'template_parts/status_parts/yellow_slips.html.twig' %}
+        {% else %}
+            <a href="{{ path('yellow_pink_slips_new',{'client':transaction.client.fullName}) }}"
+               class="btn btn-sm btn-primary">Add Yellow Slip</a>
+        {% endif %}
+        <hr>
+    {% endif %}
+
+
+
+
+    <a class="btn btn-outline-primary btn-sm"
+       href="{{ path('transaction_index', {subset: 'Pending', clientName: 'All'}) }}">Return to
+        list</a>
+
+    <a class="btn btn-outline-danger btn-sm" href="{{ path('transaction_edit', {'id': transaction.id}) }}">Edit</a>
+
+    {{ include('transaction/_delete_form.html.twig') }}
+
+{% endblock %}
+{% block additionaljs %}
+    <script>
+        $('table').removeClass('table-responsive');
+    </script>
+{% endblock %}

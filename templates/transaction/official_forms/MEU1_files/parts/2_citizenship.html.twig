@@ -1,0 +1,466 @@
+<table class="form">
+
+
+    <tbody>
+    <tr>
+        <td colspan="8">
+            <strong>
+                {% if greek==TRUE %}
+                    ΜΕΡΟΣ Ι: ΠΟΛΙΤΗΣ ΤΗΣ ΕΝΩΣΗΣ
+                {% endif %}
+                {% if incl_slash==TRUE %}/{% endif %}
+                {% if english==TRUE %}
+                    PART I: UNION CITIZEN
+                {% endif %}
+            </strong><br>
+            {% if greek==TRUE %}
+                Να συμπληρωθεί με ΜΑΥΡΟ ή ΜΠΛΕ μελάνι ΜΟΝΟ.
+            {% endif %}
+            {% if english==TRUE %}
+                When completing this form, use BLUE or BLACK ink ONLY.
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="4" class="col-head">
+            1.
+            {% if greek==TRUE %}
+                Αιτητής
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Applicant
+            {% endif %}
+
+        </td>
+        <td colspan="2" class="col-head">
+            2.
+            {% if greek==TRUE %}
+                Ημ. Γέννησης (ΗΗ/ΜΜ/ΧΧΧΧ) <br>
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Date Of Birth (DD/MM/YYYY)
+            {% endif %}
+        </td>
+        <td colspan="2" class="col-head">
+            3.
+            {% if greek==TRUE %}
+                Φύλο
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Sex
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            {% if greek==TRUE %}
+                Επώνυμο
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Surname
+            {% endif %}
+            <br>
+            {{ client.lastName }}
+        </td>
+        <td colspan="2"></td>
+        <td class="text-center">
+            {% if client.gender == 'Male' %}
+                <input name="gender" type="checkbox" checked> <br>
+            {% else %}
+                <input name="gender" type="checkbox"> <br>
+            {% endif %}
+            {% if greek==TRUE %}
+                Άρρεν
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Male
+            {% endif %}
+
+
+        </td>
+        <td class="text-center">
+            {% if client.gender == 'Female' %}
+                <input name="gender" type="checkbox" checked> <br>
+            {% else %}
+                <input name="gender" type="checkbox"> <br>
+            {% endif %}
+            {% if greek==TRUE %}
+                Θήλυ
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Female
+            {% endif %}
+
+
+
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2" colspan="2">
+            {% if greek==TRUE %}
+                Όνομα (τα)
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Name (s)
+            {% endif %}
+
+            <br>
+            <br> {{ client.firstName }}
+            <br>
+            <br>
+        </td>
+        <td rowspan="2" colspan="2">Middle or Other Surname<br>
+            <br>
+            <br>
+            <br>
+        </td>
+        <td colspan="4" class="col-head">
+            4.
+            {% if greek==TRUE %}
+                Τόπος Γέννησης (Πόλη & Χώρα)
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Place Of Birth (City & Country)
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <br>
+            <br>
+            <br>{{ passport.placeOfBirth }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="col-head">
+            5.
+            {% if greek==TRUE %}
+                Υπηκοότητα
+            {% endif %}
+            {% if incl_slash == TRUE %}/{% endif %}
+            {% if english ==TRUE %}
+                Nationality
+            {% endif %}
+        </td>
+        <td colspan="3" class="col-head">
+            6.
+            {% if greek==TRUE %}
+                Διαβατήριο ή Ταυτότητα
+            {% endif %}
+            {% if incl_slash == TRUE %}/{% endif %}
+            {% if english ==TRUE %}
+                Passport or Identity Card
+            {% endif %}
+        </td>
+        <td colspan="3" class="col-head">
+            7.
+            {% if greek==TRUE %}
+                Αρ. Εγγραφής Αλλοδαπού
+            {% endif %}
+            {% if incl_slash == TRUE %}/{% endif %}
+            {% if english ==TRUE %}
+                Alien Reg. No.
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td rowspan="2" colspan="2"><br>
+            {{ passport.country.country }}
+            <br>
+
+        </td>
+        <td colspan="3">
+            {% if greek==TRUE %}
+                Αριθμός
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                No.
+            {% endif %}
+
+            <br>
+            {{ passport.passportNumber }}
+            <br>
+        </td>
+        <td rowspan="2" colspan="3"></td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            {% if greek==TRUE %}
+                Ημ. Λήξης
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Date of Expiration
+            {% endif %}
+
+            <br> {{ passport.expiryDate|date('d-M-Y') }}<br>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="8" class="col-head">8.
+            {% if greek==TRUE %}
+                Ημ. έκδοσης Βεβαίωσης Εγγραφής ή προβλεπόμενη περίοδος διαμονής
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Registr. Certificate issue date or envisaged period of residence:
+            {% endif %}
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="8">
+            <br>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5" class="col-head">
+            9.
+            {% if greek==TRUE %}
+                Οικογενειακή Κατάσταση
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Family Status
+            {% endif %}
+        </td>
+        <td colspan="3" class="col-head">
+            10.
+            {% if greek==TRUE %}
+                Διεύθυνση Διαμονής στην Κύπρο
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Residence Address in Cyprus
+            {% endif %}
+
+        </td>
+
+    </tr>
+    <tr>
+        <td class="text-center"><input type="checkbox" class="mt-1"><br>
+            {% if greek==TRUE %}
+                Έγγαμος/η
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Married
+            {% endif %}
+        </td>
+        <td class="text-center"><input type="checkbox"><br>
+            {% if greek==TRUE %}
+                Άγαμος/η
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Single
+            {% endif %}
+        </td>
+        <td class="text-center"><input type="checkbox"><br>
+
+            {% if greek==TRUE %}
+                Διαζευγμένος/η
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Divorced
+            {% endif %}
+
+        </td>
+        <td class="text-center"><input type="checkbox"><br>
+            {% if greek==TRUE %}
+                Σε διάσταση
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Separated
+            {% endif %}
+        </td>
+        <td class="text-center"><input type="checkbox"><br>
+            {% if greek==TRUE %}
+                Χήρος/α
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Widowed
+            {% endif %}
+
+        </td>
+        <td colspan="2">
+            {% if greek==TRUE %}
+                Οδός και Αριθμός
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Street and Number
+            {% endif %}
+
+            <br>
+        </td>
+        <td>
+            {% if greek==TRUE %}
+                Αρ. Διαμ.
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Apt. Nο.
+            {% endif %}
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="col-head">
+            11.
+            {% if greek==TRUE %}
+                Ηλεκτρονικό Ταχυδρομείο (Προαιρετικό)
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Email (Optional)
+            {% endif %}
+
+        </td>
+        <td colspan="2" class="col-head">
+            12.
+            {% if greek==TRUE %}
+                Τελευταία ημερ. εισόδου στην Κύπρο
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Date of last entry in Cyprus
+            {% endif %}
+        </td>
+        <td>
+            {% if greek==TRUE %}
+                Πόλη ή Κοινότητα
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Town or Village
+            {% endif %}
+        </td>
+        <td>
+            {% if greek==TRUE %}
+                Ταχ. Κώδικας
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Postal Code
+            {% endif %}
+        </td>
+        <td>
+            {% if greek==TRUE %}
+                Επαρχία
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                District
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3"></td>
+        <td colspan="2"></td>
+        <td colspan="3">
+            {% if greek==TRUE %}
+                Ταx. Διεύθυνση (εάν είναι η ίδια με πιο πάνω αναγράψετε “ Ίδια με πιο πάνω”)
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Postal Address (If same as Residence address write “Same as above”)
+            {% endif %}
+            <br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5" class="col-head">
+            13.
+            {% if greek==TRUE %}
+                Τηλ. Επικοινωνίας
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Contact Tel.
+            {% endif %}
+
+        </td>
+        <td class="col-head">
+            14.
+            {% if greek==TRUE %}
+                Τηλ. Εργασίας
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Work Tel.
+            {% endif %}
+
+        </td>
+        <td colspan="2" class="col-head">
+            15.
+            {% if greek==TRUE %}
+                Τηλεομοιότυπο  (Προαιρετικό)
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Fax Number (Προαιρετικό / Optional)
+            {% endif %}
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5"><br></td>
+        <td><br></td>
+        <td colspan="2"><br></td>
+    </tr>
+    <tr>
+        <td colspan="6" class="col-head">
+            16.
+            {% if greek==TRUE %}
+                Υπογραφή
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Signature
+            {% endif %}
+
+        </td>
+        <td colspan="2" class="col-head">
+            {% if greek==TRUE %}
+                Ημερομηνία
+            {% endif %}
+            {% if incl_slash==TRUE %}/{% endif %}
+            {% if english==TRUE %}
+                Date
+            {% endif %}
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <br><br>
+            …………………………………………..…………………………<br><strong>
+                              {% if greek==TRUE %}
+                    Υπογραφή Αιτητή
+                {% endif %}
+                {% if incl_slash==TRUE %}/{% endif %}
+                {% if english==TRUE %}
+                    Applicant’s Signature
+                {% endif %}
+            </strong></td>
+        <td colspan="2"></td>
+    </tr>
+    </tbody>
+</table>
+

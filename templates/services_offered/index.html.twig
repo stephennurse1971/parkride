@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services Offered{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Services Offered</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Service<br>Offered</th>
+            <th>Service<br>Area</th>
+            <th>Include<br>Dropdown<br>& Footer</th>
+            <th>Requires<br>Immigration<br>Appointment</th>
+            <th>Description</th>
+            {% include 'services_offered/parts/documents_entities.html.twig' %}
+            <th>Price<br>(Upfront)</th>
+            <th>Form</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for services_offered in services_offereds %}
+            <tr>
+                <td style="text-align: center">
+                    {{ services_offered.ranking }}
+                </td>
+                <td style="text-align: left">
+                    <a target="_blank" href="{{ path('services_offered_edit', {'id': services_offered.id}) }}">
+                        {{ services_offered.serviceOffered }}
+                    </a>
+                </td>
+
+                <td style="text-align: center">
+                    {{ services_offered.serviceArea}}
+
+                </td>
+                <td style="text-align: center">
+                    {% if services_offered.includeInFooter ==1 %}
+                        <i style="color: green" class="fa fa-check"></i></a>
+                    {% else %}
+                        <i style="color: red" class="fa fa-remove"></i></a>
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+                    {% if services_offered.requiresImmigrationAppointment ==1 %}
+                        <i style="color: green" class="fa fa-check"></i></a>
+                    {% else %}
+                        <i style="color: red" class="fa fa-remove"></i></a>
+                    {% endif %}
+                </td>
+                <td title="{{ services_offered.comments }}" style="text-align: center">
+                    {% if services_offered.comments is not null %}
+                        {{ services_offered.comments |slice (0,30) }} ...
+                    {% endif %}
+                </td>
+                <td style="text-align: center">
+{#                    Passport#}
+                    {% if services_offered.docsPassport ==0 %}
+                       <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'passport'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsPassport == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'passport'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Tenancy Agreement#}
+                    {% if services_offered.docsTenancyAgreement ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'tenancy_agreement'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsTenancyAgreement == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'tenancy_agreement'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Utility Bill#}
+                    {% if services_offered.docsUtilityBill ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'utility_bills'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsUtilityBill == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'utility_bills'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Employment Contract#}
+                    {% if services_offered.docsEmploymentContract ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'employment_contract'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsEmploymentContract == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'employment_contract'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Financial Statements#}
+                    {% if services_offered.docsFinancialStatements ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'financial_statements'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsFinancialStatements == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'financial_statements'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+{#                <td style="text-align: center">#}
+{#                P60#}
+{#                    {% if services_offered.docsP60 ==0 %}#}
+{#                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'p60'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>#}
+{#                    {% elseif services_offered.docsP60 == 1 %}#}
+{#                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'p60'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>#}
+{#                    {% endif %}#}
+{#                </td>#}
+
+                <td style="text-align: center">
+{#                    School Attendance Certificate#}
+                    {% if services_offered.docsSchoolAttendanceCertificate ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'school_attendance_certificate'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsSchoolAttendanceCertificate == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'school_attendance_certificate'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Birth Marriage Death Cert#}
+                    {% if services_offered.docsBirthMarriageDeathCertificate ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'birth_marriage_death_certificate'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsBirthMarriageDeathCertificate == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'birth_marriage_death_certificate'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    CRC#}
+                    {% if services_offered.docsCriminalRecordCheck ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'criminal_record_check'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsCriminalRecordCheck == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'criminal_record_check'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Health Insurance#}
+                    {% if services_offered.docsHealthInsurance ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'health_insurance'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsHealthInsurance == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'health_insurance'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Medical#}
+                    {% if services_offered.docsMedical ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'medical'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsMedical == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'medical'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center">
+{#                    Driving License#}
+                    {% if services_offered.docsDrivingLicense ==0 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_on', 'document': 'driving_license'}) }}"> <i class="fa fa-circle" style="color: red; text-align: right"></i></a>
+                    {% elseif services_offered.docsDrivingLicense == 1 %}
+                        <a href="{{ path('services_offered_fast_edit', {'id':services_offered.id, 'action': 'turn_off', 'document': 'driving_license'}) }}"> <i class="fa fa-circle" style="color: green; text-align: right"></i></a>
+                    {% endif %}
+                </td>
+
+                <td style="text-align: right">
+                    <div class="row">
+                        <div class="col-5">
+                            {{ services_offered.price|number_format(0) }}
+                        </div>
+                        <div class="col-5">
+                            ({{ services_offered.priceUpfront|number_format(0) }})
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {{ services_offered.officialForm }}
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success btn-sm" href="{{ path('services_offered_new') }}">New</a>
+{% endblock %}
+
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": false,
+                "searching": false,
+                "bInfo": false
+            });
+        });
+    </script>
+{% endblock datatable %}

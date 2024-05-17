@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="transaction-show">
+        <table class="table">
+            <thead>
+            <tr>
+                {% include 'template_parts/status_parts/review_buttons/headers.html.twig' %}
+                <th>Child</th>
+                <th>School</th>
+                <th>Date</th>
+                <th style="text-align: center">Scan</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for school_attendance_certificate in school_attendance_certificates %}
+                <tr>
+                    {% include 'template_parts/status_parts/review_buttons/review_body.html.twig' %}
+                    <td>
+                        <a href="{{ path('school_attendance_certificates_edit', {'id': school_attendance_certificate.id}) }}">{{ school_attendance_certificate.student.fullName }}</a>
+                    </td>
+                    <td>{{ school_attendance_certificate.school }}</td>
+                    <td data-sort="{{ school_attendance_certificate.date ? school_attendance_certificate.date|date('Y-m-d') : '' }}">{{ school_attendance_certificate.date ? school_attendance_certificate.date|date('d-M-Y') : '' }}</td>
+                    <td style="text-align: center;width: 150px">
+                        {% if school_attendance_certificate.file is not empty %}
+                            <a title="{{ school_attendance_certificate.file }}" target="_blank"
+                               href="{{ path('attachments_viewfile',{id : school_attendance_certificate.id, filename: "School Attendance Certificate"}) }}"><i
+                                        class="fa fa-paperclip"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>

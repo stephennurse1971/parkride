@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Document Guidelines{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">New Document Guidelines</h1>
+
+    {{ include('document_guidelines/_form.html.twig') }}
+
+    <a class="btn btn-outline-primary btn-sm" href="{{ path('document_guidelines_index') }}">Return to list</a>
+{% endblock %}

@@ -1,0 +1,364 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transactions - {{ subset }}{% endblock %}
+
+{% block body %}
+    <h1 style="color: red">Transactions - {{ subset }}</h1>
+
+    {% if subset == 'Complete' %}
+        <a class="btn btn-outline-primary btn-sm"
+           href="{{ path('transaction_index', {subset: 'Pending', clientName: 'All'}) }}">
+            Pending</a>
+        <a class="btn btn-outline-dark btn-sm"
+           href="{{ path('transaction_index', {subset: 'Abandoned', clientName: 'All'}) }}">
+            Abandoned</a>
+    {% endif %}
+    {% if subset == 'Pending' %}
+        <a class="btn btn-outline-secondary btn-sm"
+           href="{{ path('transaction_index', {subset: 'Complete',  clientName: 'All'}) }}">
+            Completed</a>
+        <a class="btn btn-outline-dark btn-sm"
+           href="{{ path('transaction_index', {subset: 'Abandoned', clientName: 'All'}) }}">
+            Abandoned</a>
+    {% endif %}
+
+
+<div class="desktop">
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            {% if is_granted('ROLE_STAFF') %}
+                <th style="width: 450px">Client</th>
+            {% endif %}
+
+            {% if subset!="My" %}
+                <th title="Client's other transactions">
+                    <i class="fa fa-info-circle"></i>
+                </th>
+            {% else %}
+                <th> Status</th>
+            {% endif %}
+            <th style="text-align: left;border-right:1px dotted gray; width: 250px">Service</th>
+            <th style="text-align: center;border-right:1px dotted gray">Form</th>
+            <th style="text-align: center;border-right:1px dotted gray">Ready</th>
+            {% include 'services_offered/parts/documents_entities.html.twig' %}
+            <th title="Gwenny's Office Appointments" style="border-left:1px dotted gray">
+                <a target="_blank" href="{{ path('office_appointments_index') }}">GRTS<br>Appointment</a>
+            </th>
+            <th><a title="Pathos Immigration Authority (PIA) Appointments" target="_blank"
+                   href="{{ path('immigration_appointments_index') }}">Immigration<br>Office<br>Appointment</a></th>
+            <th>Availability</th>
+            <th style="border-left:1px dotted gray"> Emails
+                {% if is_granted('ROLE_STAFF') %}
+                    <br>
+                    <a title="All e-mails sent" style="color: darkseagreen" target="_blank"
+                       href="{{ path('emails_index') }}"><i class="fa fa-envelope-open-text"></i></a>
+                    <a title="Standard e-mail templates" style="color: red" target="_blank"
+                       href="{{ path('email_templates_index') }}"><i class="fa fa-chalkboard-teacher"></i></a>
+                {% endif %}
+            </th>
+            <th title="Introductory">1</th>
+            <th title="Request first payment">2</th>
+            <th title="Review">3</th>
+            <th title="Appointment">4</th>
+            <th title="Future business">5</th>
+            <th style="border-left:1px dotted gray">Payments</th>
+            <th style="border-right:1px dotted gray">Balance</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+
+                <td>
+                    <a target="_blank"
+                       href="{{ path('transaction_edit', {'id': transaction.id}) }}">{{ transaction.id }}</a>
+                </td>
+
+                {% if is_granted('ROLE_STAFF') %}
+                    {% include 'transaction/parts/client_contact_details.html.twig' %}
+                {% endif %}
+                <td>
+                    {% if subset !="My" %}
+                        <a class="btn btn-outline-success btn-sm" target="_blank"
+                           title="Open client's transaction history"
+                           href="{{ path('transaction_index', {'clientName': transaction.client.fullName, 'subset': 'All'} ) }}">
+                            {{ CountTransactions.countTransactions(transaction.client   , "Complete") }}
+                        </a>
+
+                        <a class="btn btn-outline-danger btn-sm" target="_blank"
+                           title="Open client's transaction history"
+                           href="{{ path('transaction_index', {'clientName': transaction.client.fullName, 'subset': 'All'} ) }}">
+                            {{ CountTransactions.countTransactions(transaction.client, "Pending") }}
+                        </a>
+                    {% else %}
+                        {{ transaction.status }}
+                    {% endif %}
+                </td>
+                <td style="text-align: left;border-right:1px dotted gray; width: 250px">
+                    {{ transaction.service.serviceOffered }}
+                </td>
+                <td style="text-align: center;border-right:1px dotted gray">
+                    {% if TransactionAllDocsReady.checkStatus(transaction) %}
+                        {% if transaction.service.officialForm == 'MEU1' %}
+                            <a class="btn btn-success btn-sm" target="_blank"
+                               href="{{ path('/meu1_form', {transactionId: transaction.id}) }}">MEU1</a>
+                        {% endif %}
+                        {% if transaction.service.officialForm == 'MEU3' %}
+                            <a class="btn btn-success btn-sm" target="_blank" href="{{ path('meu3_form') }}">MEU3</a>
+                        {% endif %}
+                        {% if transaction.service.officialForm == 'Bank of Cyprus Application' %}
+                            <a class="btn btn-success btn-sm" target="_blank"
+                               href="{{ path('account_form') }}">Account</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+
+                <td style="text-align: center;border-right:1px dotted gray">
+                    {% if TransactionAllDocsReady.checkStatus(transaction) %}
+                        <a class="d-inline" target="_blank"
+                           href="{{ path('transaction_show', {'id':transaction.id}) }}">
+                            <i title="All required docs ready" style="color: green" class="fa fa-thumbs-up"></i>
+                        </a>
+                    {% else %}
+                        <a class="d-inline" target="_blank"
+                           href="{{ path('transaction_show', {'id':transaction.id}) }}">
+                            <i style="color: red" class="fa fa-pen"></i>
+                        </a>
+                    {% endif %}
+                </td>
+
+                {% include 'transaction/parts/passport_status.html.twig' %}
+                {% include 'transaction/parts/tenancy_agrement_status.html.twig' %}
+                {% include 'transaction/parts/utility_bill_status.html.twig' %}
+                {% include 'transaction/parts/employment_contract_status.html.twig' %}
+                {% include 'transaction/parts/financial_statements_status.html.twig' %}
+                {% include 'transaction/parts/school_attendance_certificate_status.html.twig' %}
+                {% include 'transaction/parts/birth_marriage_death_certificate_status.html.twig' %}
+                {% include 'transaction/parts/criminal_record_check_status.html.twig' %}
+                {% include 'transaction/parts/health_insurance_status.html.twig' %}
+                {% include 'transaction/parts/medical_status.html.twig' %}
+                {% include 'transaction/parts/driving_license_status.html.twig' %}
+
+                <td style="text-align: left;border-left:1px dotted gray; width: 200px">
+                    {% for future_office_appointment in future_office_appointments %}
+                        {% if future_office_appointment.client == transaction.client
+                            and future_office_appointment.date >= now %}
+                            <li style="color: green"
+                                title="{{ future_office_appointment.time }} :00h ({{ future_office_appointment.staff.firstName  |slice(0,1) }}{{ future_office_appointment.staff.lastName |slice(0,1) }})">{{ future_office_appointment.date|date('d-M-y') }}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% for future_office_appointment in future_office_appointments %}
+                        {% if future_office_appointment.client == transaction.client
+                            and future_office_appointment.date < now %}
+                            <li style="color: red"
+                                title="{{ future_office_appointment.time }} :00h ({{ future_office_appointment.staff.firstName  |slice(0,1) }}{{ future_office_appointment.staff.lastName |slice(0,1) }})">{{ future_office_appointment.date|date('d-M-y') }}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for immigration_office_appointment in immigration_office_appointments %}
+                        {% if immigration_office_appointment.client == transaction.client
+                            and immigration_office_appointment.date >= now %}
+                            <li title=" {{ immigration_office_appointment.time }}:00h ">  {{ immigration_office_appointment.date|date('d-M-y') }}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if transaction.service.requiresImmigrationAppointment ==1 %}
+                        {% set dates_available = [] %}
+                        {% set dates_unavailable = [] %}
+                        {% set all_dates_available = '' %}
+                        {% set all_dates_unavailable = '' %}
+                        {% for client_availability in client_availabilities %}
+                            {% if client_availability.client == transaction.client and client_availability.available == 1 and client_availability.date > now %}
+                                {% set dates_available = dates_available|merge([client_availability.date|date('d-M-y')]) %}
+                            {% endif %}
+                            {% if client_availability.client == transaction.client and client_availability.available == 0 and client_availability.date > now %}
+                                {% set dates_unavailable = dates_unavailable|merge([client_availability.date|date('d-M-y')]) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for date in dates_available|sort %}
+                            {% set all_dates_available = all_dates_available~date~', ' %}
+                        {% endfor %}
+                        {% for date in dates_unavailable|sort %}
+                            {% set all_dates_unavailable = all_dates_unavailable~date~', ' %}
+                        {% endfor %}
+
+                        {% if  all_dates_unavailable is not empty %}
+                            <i style="color: red" class="fa fa-info" title="{{ all_dates_unavailable }}"></i>
+                        {% endif %}
+                        {% if  all_dates_available is not empty %}
+                            <a title="{{ all_dates_available }}" class="btn btn-outline-success btn-sm" target="_blank"
+                               href="{{ path('client_availability_by_client', {clientFullName: transaction.client.fullName}) }}">Availability</a>
+                        {% else %}
+                            <a title="{{ all_dates_available }}" class="btn btn-dark btn-sm" target="_blank"
+                               href="{{ path('client_availability_by_client', {clientFullName: transaction.client.fullName}) }}">Availability</a>
+                        {% endif %}
+                    {% else %}
+                        <i title="Immigration Office Appointment NOT Required" style="color: grey"
+                           class="fa fa-remove"></i>
+                    {% endif %}
+                </td>
+
+                {#                <---- Send emails ---> #}
+                <td style="text-align: center; border-left:1px dotted gray">
+                    {% include 'transaction/parts/email_send.html.twig' %}
+                </td>
+
+                {#                <---- Record of sent emails ---> #}
+                <td style="text-align: center">
+                    {% for email in emails %}
+                        {% if email.client == transaction.client and email.stage|slice(0,1) == "1" %}
+                            <a title="Sent: {{ email.dateTime|date('d-M-y') }}"
+                               style="color: green" target="_blank"
+                               href="{{ path('emails_show', {id: email.id}) }}"><i class="fa fa-envelope"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td style="text-align: center">
+                    {% for email in emails %}
+                        {% if email.client == transaction.client and email.stage|slice(0,1) == "2" %}
+                            <a title="Sent: {{ email.dateTime|date('d-M-y') }}"
+                               style="color: green" target="_blank"
+                               href="{{ path('emails_show', {id: email.id}) }}"><i class="fa fa-envelope"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td style="text-align: center">
+                    {% for email in emails %}
+                        {% if email.client == transaction.client and email.stage|slice(0,1) == "3" %}
+                            <a title="Sent: {{ email.dateTime|date('d-M-y') }}"
+                               style="color: green" target="_blank"
+                               href="{{ path('emails_show', {id: email.id}) }}"><i class="fa fa-envelope"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td style="text-align: center">
+                    {% for email in emails %}
+                        {% if email.client == transaction.client and email.stage|slice(0,1) == "4" %}
+                            <a title="Sent: {{ email.dateTime|date('d-M-y') }}"
+                               style="color: green" target="_blank"
+                               href="{{ path('emails_show', {id: email.id}) }}"><i class="fa fa-envelope"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td style="text-align: center">
+                    {% for email in emails %}
+                        {% if email.client == transaction.client and email.stage|slice(0,1) == "5" %}
+                            <a title="Sent: {{ email.dateTime|date('d-M-y') }}"
+                               style="color: green" target="_blank"
+                               href="{{ path('emails_show', {id: email.id}) }}"><i class="fa fa-envelope"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+
+                <td style="text-align: right; border-left:1px dotted gray">
+                    {% set totalPaid = 0 %}
+                    {% for payment in payments %}
+                        {% if payment.transaction.id == transaction.id %}
+                            {% set totalPaid = totalPaid + payment.amount %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ totalPaid|number_format(2, '.', ',') }}
+
+                </td>
+
+                <td style="text-align: right; border-right:1px dotted gray">
+                    {% set BalanceOwed = transaction.service.price - totalPaid %}
+                    {{ BalanceOwed|number_format(2, '.', ',') }}
+                    <a target="_blank" class="btn btn-success btn-sm"
+                       href="{{ path('payments_new', {transactionId: transaction.id, balanceOwed: BalanceOwed}) }}">$</a>
+                </td>
+
+                <td>
+                    <form method="post" action="{{ path('transaction_delete', {'id': transaction.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ transaction.id) }}">
+                        <button class="btn btn-outline-danger btn-sm">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    <div class="mobile">
+        ccc
+
+    </div>
+
+{% endblock %}
+
+{% block datatable %}
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                'pageLength': 100,
+                "order": [[0, 'asc']],
+                "paging": true,
+                "searching": true,
+                "bInfo": true
+            });
+        });
+    </script>
+{% endblock datatable %}
+
+
+
+
+
+{#            <th><a target="_blank" href="{{ path('passports_index') }}">Passport</a></th> #}
+{#            <th><a target="_blank" href="{{ path('tenancy_agreements_index') }}">Tenancy Agreement</a></th> #}
+{#            <th><a target="_blank" href="{{ path('utility_bills_index') }}">Utility Bill</a></th> #}
+{#            <th><a target="_blank" href="{{ path('employment_contracts_index') }}">Employment Contract</a></th> #}
+{#            <th><a target="_blank" href="{{ path('financial_statements_index') }}">Financial Statements</a></th> #}
+{#            <th><a target="_blank" href="{{ path('app_home') }}">P60</a></th> #}
+{#            <th><a target="_blank" href="{{ path('school_attendance_certificates_index') }}">School Attendance Cert</a></th> #}
+{#            <th><a target="_blank" href="{{ path('criminal_record_check_index') }}">Criminal Record Check</a></th> #}
+{#            <th><a target="_blank" href="{{ path('health_insurance_index') }}">Health Insurance</a></th> #}
+{#            <th><a target="_blank" href="{{ path('medical_index') }}">Medical</a></th> #}
+{#            <th><a target="_blank" href="{{ path('driving_license_index') }}">Driving License</a></th> #}
+
+
+
+
+
+{#                <td style="text-align: center"> #}
+{#                    #}{#                    Passport #}
+{#                    {% set PassportFlag=1 %} #}
+{#                    {% if transaction.service.docsPassport == 1 %} #}
+{#                        {% for passport in passports %} #}
+{#                            {% if passport.passportHolder == transaction.client %} #}
+{#                                {% if passport.reviewed == "Checked" %} #}
+{#                                    <i title="{{ passport.passportNumber }} {{ passport.placeOfBirth }} {{ passport.expiryDate|date('d-M-Y') }} " #}
+{#                                       style="color: green" class="fa fa-check"></i> #}
+{#                                {% else %} #}
+{#                                    <i title="Passport requires review; Passport number:" {{ passport.passportNumber }}  {{ passport.placeOfBirth }} {{ passport.expiryDate|date('d-M-Y') }} " #}
+{#                                       style="color: orange" class="fa fa-check"></i> #}
+{#                                {% endif %} #}
+{#                                {% set PassportFlag =0 %} #}
+{#                            {% endif %} #}
+{#                        {% endfor %} #}
+{#                        {% if PassportFlag == 1 %} #}
+{#                            <a target="_blank" href="{{ path('passports_new') }}"><i class="fa fa-plus"></i></a> #}
+{#                        {% endif %} #}
+
+{#                    {% else %} #}
+{#                        <i title="Not Required" style="color: gray" class="fa fa-dot-circle"></i> #}
+{#                    {% endif %} #}
+{#                </td> #}
