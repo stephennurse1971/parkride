@@ -47,7 +47,7 @@ class   HomeController extends AbstractController
                 'include_contact' => 'Yes'
             ]);
         } else {
-            return $this->render('/home/products.html.twig', [
+            return $this->render('home/products.html.twig', [
                 'product' => $product,
                 'cms_copy_array' => $cms_copy,
                 'cms_photo_array' => $cms_photo,

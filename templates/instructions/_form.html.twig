@@ -7,8 +7,18 @@
 <div class="row">
     <div class="col-2">
         {{ form_row(form.topic) }}
-        {{ form_row(form.summary) }}
+    </div>
+    <div class="col-2">
+        {{ form_row(form.photoOrVideo) }}
+    </div>
+    <div class="col-2">
         {{ form_row(form.media) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-9">
+        {{ form_row(form.summary) }}
     </div>
 </div>
 

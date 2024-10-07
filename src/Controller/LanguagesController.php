@@ -55,9 +55,9 @@ class LanguagesController extends AbstractController
         }
 
 
-        return $this->renderForm('languages/new.html.twig', [
+        return $this->render('languages/new.html.twig', [
             'language' => $language,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

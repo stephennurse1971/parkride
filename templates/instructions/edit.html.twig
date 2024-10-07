@@ -11,3 +11,13 @@
 
     {{ include('instructions/_delete_form.html.twig') }}
 {% endblock %}
+
+{% block additionaljs %}
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#instructions_summary'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+{% endblock %}

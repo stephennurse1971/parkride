@@ -9,3 +9,13 @@
 
     <a class="btn btn-outline-primary btn-sm" href="{{ path('instructions_index') }}">Return to list</a>
 {% endblock %}
+
+{% block additionaljs %}
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#instructions_summary'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+{% endblock %}

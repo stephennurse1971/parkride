@@ -29,13 +29,11 @@ class InstructionsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $instruction = $form->get('media')->getData();
-//            $instructionsRepository->add($instruction, true);
-
-            $originalFilename = pathinfo($instruction->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $originalFilename->guessExtension();
+            $media = $form->get('media')->getData();
+            $originalFilename = pathinfo($media->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = $originalFilename .".". $media->guessExtension();
             try {
-                $instruction->move(
+                $media->move(
                     $this->getParameter('instructions_directory'),
                     $newFilename
                 );
@@ -43,15 +41,14 @@ class InstructionsController extends AbstractController
             } catch (FileException $e) {
                 die('Import failed');
             }
-
+           $instructionsRepository->add($instruction, true);
 
             return $this->redirectToRoute('instructions_index', [], Response::HTTP_SEE_OTHER);
         }
 
-
-        return $this->renderForm('instructions/new.html.twig', [
+        return $this->render('instructions/new.html.twig', [
             'instruction' => $instruction,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -70,14 +67,28 @@ class InstructionsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $media = $form->get('media')->getData();
+            if($media) {
+                $originalFilename = pathinfo($media->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename .".". $media->guessExtension();
+                try {
+                    $media->move(
+                        $this->getParameter('instructions_directory'),
+                        $newFilename
+                    );
+                    $instruction->setMedia($newFilename);
+                } catch (FileException $e) {
+                    die('Import failed');
+                }
+            }
             $instructionsRepository->add($instruction, true);
 
             return $this->redirectToRoute('instructions_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('instructions/edit.html.twig', [
+        return $this->render('instructions/edit.html.twig', [
             'instruction' => $instruction,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
